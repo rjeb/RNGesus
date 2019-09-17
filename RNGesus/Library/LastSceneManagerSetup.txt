@@ -1,9 +1,5 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/Scenes/PrototypeCombatScene.unity
-=======
 - path: Assets/Scenes/TitleScreenScene.unity
->>>>>>> e195485e8cadcd6430525205314c3b991f939487
   isLoaded: 1
   isActive: 1
   isSubScene: 0
