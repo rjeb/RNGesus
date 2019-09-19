@@ -64,7 +64,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BaseEnemy.cs" />
     <Compile Include="Assets\Scripts\BasePlayerCharacter.cs" />
+    <Compile Include="Assets\Scripts\EnemyStateMachine.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\PlayerStateMachine.cs" />
     <Compile Include="Assets\Scripts\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\TurnController.cs" />
     <Reference Include="Unity.Timeline.Editor">

@@ -12,6 +12,12 @@ public class BaseEnemy
     public float baseMP;
     public float currentMP;
 
+    public float baseAtk;
+    public float currentAtk;
+
+    public float baseDef;
+    public float currentDef;
+
     int strenth;
     int magic;
     int dexterity;
