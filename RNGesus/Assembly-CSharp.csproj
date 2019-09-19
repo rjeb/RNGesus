@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\TileBasedController.cs" />
+     <Compile Include="Assets\Scripts\TitleScreen.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/phong/Documents/GitHub/RNGesus/RNGesus/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
