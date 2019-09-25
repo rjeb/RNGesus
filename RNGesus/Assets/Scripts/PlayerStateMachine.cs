@@ -12,6 +12,7 @@ public class PlayerStateMachine : MonoBehaviour
         WAITING,
         SELECTING,
         ACTION,
+        MOVED,
         DEAD
     }
 
@@ -34,6 +35,8 @@ public class PlayerStateMachine : MonoBehaviour
             case (TurnState.SELECTING):
                 break;
             case (TurnState.ACTION):
+                break;
+            case (TurnState.MOVED):
                 break;
             case (TurnState.DEAD):
                 break;
