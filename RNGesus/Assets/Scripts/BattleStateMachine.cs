@@ -15,14 +15,15 @@ public class BattleStateMachine : MonoBehaviour
     public PerformAction battleStates;
 
     public List<HandleTurn> PerformList = new List<HandleTurn>();
-    public List<GameObject> PlayerCharacters = new List<GameObjects>();
-    public List<GameObject> EnemyCharacters = new List<GameObjects>();
+    public List<GameObject> PlayerCharacters = new List<GameObject>();
+    public List<GameObject> EnemyCharacters = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
         battleStates = PerformAction.WAIT;
         EnemyCharacters.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+        PlayerCharacters.AddRange(GameObject.FindGameObjectsWithTag("Player"));
     }
 
     // Update is called once per frame

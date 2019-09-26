@@ -6,6 +6,8 @@ public class EnemyStateMachine : MonoBehaviour
 {
     public BaseEnemy enemy;
 
+    private BattleStateMachine BSM;
+
     public enum TurnState
     {
         ADDTOLIST,
@@ -21,7 +23,7 @@ public class EnemyStateMachine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
     }
 
     // Update is called once per frame

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandleTurns
+public class HandleTurn
 {
     public string Attacker; //name of Attacker
     public GameObject AttackersGameObject; //who attacks
