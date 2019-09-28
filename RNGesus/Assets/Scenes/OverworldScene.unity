@@ -513,6 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e759b6177af252d419da0b8e4b460a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapNode: {fileID: 6466922382401079796, guid: e57cba06f1363994dac36bd843769e63, type: 3}
 --- !u!4 &1108483855
 Transform:
   m_ObjectHideFlags: 0
@@ -739,7 +740,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
