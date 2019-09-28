@@ -32,11 +32,28 @@ public class BattleStateMachine : MonoBehaviour
         switch (battleStates)
         {
             case (PerformAction.WAIT):
+                if(PerformList.Count > 0){
+                    battleStates = PerformAction.TAKEACTION;
+                }
                 break;
             case (PerformAction.TAKEACTION):
+                GameObject performer = GameObject.Find(PerformList[0].Attacker);
+                if(PerformList[0].Type == "Enemy"){
+                    EnemyStateMachine ESM = performer.GetComponent<EnemyStateMachine> ();
+                    ESM.playerToAttack = PerformList[0].AttackersTarget;
+                    ESM.currentState = EnemyStateMachine.TurnState.ACTION;
+                }
+                if(PerformList[0].Type == "Hero"){
+
+                }
+                battleStates = PerformAction.PERFORMACTION;
                 break;
             case (PerformAction.PERFORMACTION):
                 break;
         }
+    }
+
+    public void collectActions(HandleTurn input){
+        PerformList.Add(input);
     }
 }

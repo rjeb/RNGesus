@@ -7,13 +7,20 @@ public class EnemyStateMachine : MonoBehaviour
     public BaseEnemy enemy;
 
     private BattleStateMachine BSM;
+    private Vector3 startPosition;
+    bool moved = false;
+
+    //TimeForAction variables
+    private bool actionStarted = false;
+    public GameObject playerToAttack;
+    private float animSpeed = 5f;
 
     public enum TurnState
     {
-        ADDTOLIST,
         WAITING,
-        SELECTING,
+        CHOOSEACTION,
         ACTION,
+        IDLE,
         MOVED,
         DEAD
     }
@@ -24,21 +31,29 @@ public class EnemyStateMachine : MonoBehaviour
     void Start()
     {
         BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
+        startPosition = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         switch (currentState)
-        {
-            case (TurnState.ADDTOLIST):
-                break;
+        {   
+            //Idle state before taking turns
             case (TurnState.WAITING):
+                currentState = TurnState.CHOOSEACTION;
                 break;
-            case (TurnState.SELECTING):
+            case (TurnState.CHOOSEACTION):
+                chooseAction();
+                currentState = TurnState.IDLE;
                 break;
             case (TurnState.ACTION):
+                StartCoroutine(TimeForAction());
                 break;
+            //idle state after selecting
+            case (TurnState.IDLE):
+                break;
+            //Idle state after taken turn
             case (TurnState.MOVED):
                 break;
             case (TurnState.DEAD):
@@ -46,4 +61,56 @@ public class EnemyStateMachine : MonoBehaviour
 
         }
     }
+
+    void chooseAction(){
+    
+        HandleTurn myAttack = new HandleTurn();
+        myAttack.Attacker = enemy.name;
+        myAttack.Type = "Enemy";
+        myAttack.AttackersGameObject = this.gameObject;
+        myAttack.AttackersTarget = BSM.PlayerCharacters[Random.Range(0, BSM.PlayerCharacters.Count)];
+        BSM.collectActions(myAttack);
+    }
+
+    private IEnumerator TimeForAction(){
+        if (actionStarted){
+            yield break;
+        }
+        actionStarted = true;
+
+        //animate the enemy near the hero to attack
+        Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 1.5f, playerToAttack.transform.position.y, playerToAttack.transform.position.z);
+        while (MoveTowardsEnemy(playerPosition)){
+            yield return null;
+        }
+        //wait
+        yield return new WaitForSeconds(1.5f);
+        //do damage
+
+        //animate back to start position
+        Vector3 firstPosition = startPosition;
+         while (MoveTowardsStart(firstPosition)){
+            yield return null;
+        }
+        //remove this performer from list in BSM
+        BSM.PerformList.RemoveAt(0);
+        //reset BSM to WAIT
+        BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
+        //end coroutine
+        actionStarted = false;
+
+        moved = true;
+        currentState = TurnState.MOVED;
+    }
+
+    private bool MoveTowardsEnemy(Vector3 target){
+
+        return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
+    }
+
+    private bool MoveTowardsStart(Vector3 target){
+
+        return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
+    }
+
 }
