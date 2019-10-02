@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\BattleStateMachine.cs" />
      <Compile Include="Assets\Scripts\EnemyStateMachine.cs" />
      <Compile Include="Assets\Scripts\HandleTurn.cs" />
+     <Compile Include="Assets\Scripts\LevelSelector.cs" />
      <Compile Include="Assets\Scripts\OverworldHandler.cs" />
      <Compile Include="Assets\Scripts\PlayerStateMachine.cs" />
      <Compile Include="Assets\Scripts\TestFoler\PlayerController.cs" />
