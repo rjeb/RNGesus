@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BattleStateMachine : MonoBehaviour
 {
+    public enum Turn{
+        PLAYER,
+        ENEMY
+    }
 
     public enum PerformAction
     {
@@ -13,6 +17,7 @@ public class BattleStateMachine : MonoBehaviour
     }
 
     public PerformAction battleStates;
+    public Turn turn;
 
     public List<HandleTurn> PerformList = new List<HandleTurn>();
     public List<GameObject> PlayerCharacters = new List<GameObject>();
@@ -21,6 +26,7 @@ public class BattleStateMachine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        turn = Turn.ENEMY;
         battleStates = PerformAction.WAIT;
         EnemyCharacters.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
         PlayerCharacters.AddRange(GameObject.FindGameObjectsWithTag("Player"));
@@ -43,10 +49,14 @@ public class BattleStateMachine : MonoBehaviour
                     ESM.playerToAttack = PerformList[0].AttackersTarget;
                     ESM.currentState = EnemyStateMachine.TurnState.ACTION;
                 }
-                if(PerformList[0].Type == "Hero"){
-
+                if(PerformList[0].Type == "Player"){
+                    PlayerStateMachine PSM = performer.GetComponent<PlayerStateMachine>();
+                    PSM.enemyToAttack = PerformList[0].AttackersTarget;
+                    PSM.currentState = PlayerStateMachine.TurnState.ACTION;
                 }
-                battleStates = PerformAction.PERFORMACTION;
+                if (PerformList.Count == 0) {
+                    battleStates = PerformAction.WAIT;
+                }
                 break;
             case (PerformAction.PERFORMACTION):
                 break;

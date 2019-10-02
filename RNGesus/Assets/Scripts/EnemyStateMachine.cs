@@ -8,7 +8,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private BattleStateMachine BSM;
     private Vector3 startPosition;
-    bool moved = false;
+    public bool moved = false;
 
     //TimeForAction variables
     private bool actionStarted = false;
@@ -98,9 +98,24 @@ public class EnemyStateMachine : MonoBehaviour
         BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
         //end coroutine
         actionStarted = false;
-
+        //determine if all enemies have moved
         moved = true;
         currentState = TurnState.MOVED;
+        bool allMoved = true;
+        for(int i = 0; i < BSM.EnemyCharacters.Count; i++){
+            if (BSM.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved == false){
+                allMoved = false;
+                break;
+            }
+        }
+
+        if (allMoved == true){
+            BSM.turn = BattleStateMachine.Turn.PLAYER;
+            for(int i = 0; i < BSM.EnemyCharacters.Count; i++){
+                BSM.PlayerCharacters[i].GetComponent<PlayerStateMachine>().currentState = PlayerStateMachine.TurnState.WAITING;
+                BSM.PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved = false;
+            }
+        }
     }
 
     private bool MoveTowardsEnemy(Vector3 target){
