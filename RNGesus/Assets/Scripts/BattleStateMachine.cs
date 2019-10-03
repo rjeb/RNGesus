@@ -66,4 +66,46 @@ public class BattleStateMachine : MonoBehaviour
     public void collectActions(HandleTurn input){
         PerformList.Add(input);
     }
+
+    public void switchTurns(){
+        if (this.turn == Turn.PLAYER){
+            this.turn = Turn.ENEMY;
+            for (int i = 0; i < this.EnemyCharacters.Count; i++)
+            {
+                this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.WAITING;
+                this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved = false;
+            }
+        }
+        else if(this.turn == Turn.ENEMY){
+            this.turn = Turn.PLAYER;
+            for(int i = 0; i < this.EnemyCharacters.Count; i++){
+                this.PlayerCharacters[i].GetComponent<PlayerStateMachine>().currentState = PlayerStateMachine.TurnState.WAITING;
+                this.PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved = false;
+            }
+        }
+    }
+
+    public bool allPlayersMoved(){
+        bool allMoved = true;
+        for (int i = 0; i < this.PlayerCharacters.Count; i++)
+        {
+            if (this.PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved == false)
+            {
+                allMoved = false;
+                return allMoved;
+            }
+        }
+        return allMoved;
+    }
+
+    public bool allEnemiesMoved(){
+        bool allMoved = true;
+        for(int i = 0; i < this.EnemyCharacters.Count; i++){
+            if (this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved == false){
+                allMoved = false;
+                return allMoved;
+            }
+        }
+        return allMoved;
+    }
 }

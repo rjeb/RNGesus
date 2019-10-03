@@ -103,25 +103,10 @@ public class PlayerStateMachine : MonoBehaviour
 
         moved = true;
         currentState = TurnState.MOVED;
-        //determine if all Players have moved
-        bool allMoved = true;
-        for (int i = 0; i < BSM.EnemyCharacters.Count; i++)
+        //switch if all players have moved
+        if (BSM.allPlayersMoved())
         {
-            if (BSM.PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved == false)
-            {
-                allMoved = false;
-                break;
-            }
-        }
-
-        if (allMoved == true)
-        {
-            BSM.turn = BattleStateMachine.Turn.ENEMY;
-            for (int i = 0; i < BSM.EnemyCharacters.Count; i++)
-            {
-                BSM.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.WAITING;
-                BSM.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved = false;
-            }
+            BSM.switchTurns();
         }
     }
 
