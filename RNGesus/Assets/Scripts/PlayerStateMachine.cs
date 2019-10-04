@@ -34,7 +34,12 @@ public class PlayerStateMachine : MonoBehaviour
         BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         startPosition = transform.position;
         currentState = TurnState.IDLE;
-    }
+        for (int i = 0; i < 3; i++)
+        {
+            CardAttack1 Card1 = new CardAttack1();
+            player.Cards.Add(Card1);
+        } 
+}
 
     // Update is called once per frame
     void Update()
@@ -46,8 +51,8 @@ public class PlayerStateMachine : MonoBehaviour
                 currentState = TurnState.CHOOSEACTION;
                 break;
             case (TurnState.CHOOSEACTION):
-                chooseAction();
-                currentState = TurnState.IDLE;
+                //chooseAction();
+                //currentState = TurnState.IDLE;
                 break;
             case (TurnState.ACTION):
                 StartCoroutine(TimeForAction());
@@ -81,6 +86,7 @@ public class PlayerStateMachine : MonoBehaviour
         actionStarted = true;
 
         //animate the player near the enemy to attack
+        yield return new WaitForSeconds(1.0f);
         Vector3 enemyPosition = new Vector3(enemyToAttack.transform.position.x - 1.5f, enemyToAttack.transform.position.y, enemyToAttack.transform.position.z);
         while (MoveTowardsPlayer(enemyPosition)){
             yield return null;
@@ -119,5 +125,6 @@ public class PlayerStateMachine : MonoBehaviour
 
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
+
 
 }

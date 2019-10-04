@@ -62,9 +62,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\BaseCard.cs" />
     <Compile Include="Assets\Scripts\BaseEnemy.cs" />
     <Compile Include="Assets\Scripts\BasePlayerCharacter.cs" />
     <Compile Include="Assets\Scripts\BattleStateMachine.cs" />
+    <Compile Include="Assets\Scripts\CardAttack1.cs" />
+    <Compile Include="Assets\Scripts\CardButton.cs" />
     <Compile Include="Assets\Scripts\EnemyStateMachine.cs" />
     <Compile Include="Assets\Scripts\HandleTurn.cs" />
     <Compile Include="Assets\Scripts\OverworldHandler.cs" />

@@ -79,6 +79,7 @@ public class EnemyStateMachine : MonoBehaviour
         actionStarted = true;
 
         //animate the enemy near the hero to attack
+        yield return new WaitForSeconds(1.0f);
         Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 1.5f, playerToAttack.transform.position.y, playerToAttack.transform.position.z);
         while (MoveTowardsEnemy(playerPosition)){
             yield return null;
@@ -116,5 +117,6 @@ public class EnemyStateMachine : MonoBehaviour
 
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
+    
 
 }

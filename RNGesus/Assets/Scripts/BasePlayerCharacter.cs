@@ -13,6 +13,8 @@ public class BasePlayerCharacter
     public float baseMP;
     public float currentMP;
 
+    public List<BaseCard> Cards;
+
     int strenth;
     int magic;
     int dexterity;
