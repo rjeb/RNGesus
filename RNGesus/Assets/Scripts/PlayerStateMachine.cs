@@ -109,11 +109,6 @@ public class PlayerStateMachine : MonoBehaviour
 
         moved = true;
         currentState = TurnState.MOVED;
-        //switch if all players have moved
-        if (BSM.allPlayersMoved())
-        {
-            BSM.switchTurns();
-        }
     }
 
     private bool MoveTowardsPlayer(Vector3 target){

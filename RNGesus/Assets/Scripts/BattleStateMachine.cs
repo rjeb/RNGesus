@@ -58,6 +58,8 @@ public class BattleStateMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //switch on battleState
         switch (battleStates)
         {
             case (PerformAction.WAIT):
@@ -110,6 +112,7 @@ public class BattleStateMachine : MonoBehaviour
             case (PlayerGUI.INPUT):
                break;
             case (PlayerGUI.SELECTING):
+                /*
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100)){
@@ -121,16 +124,23 @@ public class BattleStateMachine : MonoBehaviour
                         selectEnemy(EnemyCharacters.IndexOf(hitObject));
                     }
                 }
+                */
+                if ( Input.GetMouseButtonDown (0)){ 
+                    if (this.detectHitObject() == true){
+                        EnemyStateMachine tmp = hitObject.GetComponent<EnemyStateMachine>();
+                        if (tmp != null){
+                            selectEnemy(EnemyCharacters.IndexOf(hitObject));
+                        }
+                    }
+                 }
+ 
                 break;
             case (PlayerGUI.ACTION):
                 this.performAction();
                 selectedPlayer.GetComponent<PlayerStateMachine>().moved = true;
+                //if every player has moved, proceed to switch turns to Enemy Turn
                 if(this.allPlayersMoved() == true){
-                    this.playerInput = PlayerGUI.INPUT;
-                    this.playerSelected = false;
-                    this.cardsLoaded = false;
-                    this.targetsSelected = false;
-                    this.switchTurns();
+                    this.playerInput = PlayerGUI.DONE;
                 }
                 else{
                     this.playerSelected = false;
@@ -140,25 +150,31 @@ public class BattleStateMachine : MonoBehaviour
                 }
                break;
             case (PlayerGUI.DONE):
+               this.switchTurns();
+               this.playerInput = PlayerGUI.WAITING;
                break;
         }
     }
 
+    //add an action-to-do to the list of actions
     public void collectActions(HandleTurn input){
         PerformList.Add(input);
     }
 
+    //switch the turn between player and enemy turn
     public void switchTurns(){
         if (this.turn == Turn.PLAYER){
-            this.turn = Turn.ENEMY;
             for (int i = 0; i < this.EnemyCharacters.Count; i++)
             {
                 this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.WAITING;
                 this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved = false;
             }
+            this.playerSelected = false;
+            this.cardsLoaded = false;
+            this.targetsSelected = false;
+            this.turn = Turn.ENEMY;
         }
         else if(this.turn == Turn.ENEMY){
-            this.turn = Turn.PLAYER;
             for(int i = 0; i < this.EnemyCharacters.Count; i++){
                 this.PlayerCharacters[i].GetComponent<PlayerStateMachine>().currentState = PlayerStateMachine.TurnState.WAITING;
                 this.PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved = false;
@@ -167,9 +183,11 @@ public class BattleStateMachine : MonoBehaviour
                 this.targetsSelected = false;
                 this.playerInput = PlayerGUI.WAITING;
             }
+            this.turn = Turn.PLAYER;
         }
     }
 
+    //returns true if all players have moved
     public bool allPlayersMoved(){
         bool allMoved = true;
         for (int i = 0; i < this.PlayerCharacters.Count; i++)
@@ -183,6 +201,7 @@ public class BattleStateMachine : MonoBehaviour
         return allMoved;
     }
 
+    //returns true if all enemies have moved
     public bool allEnemiesMoved(){
         bool allMoved = true;
         for(int i = 0; i < this.EnemyCharacters.Count; i++){
@@ -194,6 +213,7 @@ public class BattleStateMachine : MonoBehaviour
         return allMoved;
     }
 
+    //select the card with index cardNum
     public void selectCard(int cardNum){
         if (this.playerInput == PlayerGUI.INPUT && this.playerSelected == true){
             this.selectedCard = CardInfo[cardNum];
@@ -201,6 +221,7 @@ public class BattleStateMachine : MonoBehaviour
         }
     }
 
+    //select the enemy with index cardNum
     public void selectEnemy(int enemyNum){
         if (this.playerInput == PlayerGUI.SELECTING){
             selectedTargets.Clear();
@@ -209,8 +230,7 @@ public class BattleStateMachine : MonoBehaviour
         }
     }
 
-
-
+    //add action to queue based on current selected player, card, and enemy
     private void performAction(){
     
         HandleTurn myAttack = new HandleTurn();
@@ -219,6 +239,19 @@ public class BattleStateMachine : MonoBehaviour
         myAttack.AttackersGameObject = selectedPlayer;
         myAttack.AttackersTarget = selectedTargets[0];
         this.collectActions(myAttack);
+    }
+
+    public bool detectHitObject(){
+        RaycastHit hit; 
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
+        if ( Physics.Raycast (ray,out hit,100.0f)) {
+            this.hitObject = hit.transform.gameObject;
+            Debug.Log("You selected the " + hitObject.name); // ensure you picked right object
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }
