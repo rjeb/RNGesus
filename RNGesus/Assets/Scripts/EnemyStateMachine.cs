@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour
+public class EnemyStateMachine : MonoBehaviour, Subject
 {
     public BaseEnemy enemy;
 
@@ -10,10 +10,16 @@ public class EnemyStateMachine : MonoBehaviour
     private Vector3 startPosition;
     public bool moved = false;
 
+    //selection variables
+    private Color startcolor;
+
     //TimeForAction variables
     private bool actionStarted = false;
     public GameObject playerToAttack;
     private float animSpeed = 5f;
+
+    //Subject variables
+    List<Observer> observerList; 
 
     public enum TurnState
     {
@@ -32,6 +38,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         startPosition = transform.position;
+        observerList = new List<Observer>(); 
     }
 
     // Update is called once per frame
@@ -79,6 +86,7 @@ public class EnemyStateMachine : MonoBehaviour
         actionStarted = true;
 
         //animate the enemy near the hero to attack
+        yield return new WaitForSeconds(1.0f);
         Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 1.5f, playerToAttack.transform.position.y, playerToAttack.transform.position.z);
         while (MoveTowardsEnemy(playerPosition)){
             yield return null;
@@ -101,20 +109,9 @@ public class EnemyStateMachine : MonoBehaviour
         //determine if all enemies have moved
         moved = true;
         currentState = TurnState.MOVED;
-        bool allMoved = true;
-        for(int i = 0; i < BSM.EnemyCharacters.Count; i++){
-            if (BSM.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved == false){
-                allMoved = false;
-                break;
-            }
-        }
-
-        if (allMoved == true){
-            BSM.turn = BattleStateMachine.Turn.PLAYER;
-            for(int i = 0; i < BSM.EnemyCharacters.Count; i++){
-                BSM.PlayerCharacters[i].GetComponent<PlayerStateMachine>().currentState = PlayerStateMachine.TurnState.WAITING;
-                BSM.PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved = false;
-            }
+        //switch turns if all enemies have moved
+        if (BSM.allEnemiesMoved()){
+            BSM.switchTurns();
         }
     }
 
@@ -126,6 +123,38 @@ public class EnemyStateMachine : MonoBehaviour
     private bool MoveTowardsStart(Vector3 target){
 
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
+    }
+    
+    //methods to change the color of the player character
+    public void highlight(){
+         startcolor = this.GetComponent<Renderer>().material.color;
+         this.GetComponent<Renderer>().material.color = Color.grey;
+    }
+
+    public void dehighlight(){
+         this.GetComponent<Renderer>().material.color = startcolor;
+    }
+
+    //methods that must be implement to inherit from interface 'Subject'
+    public void registerObserver(Observer o) { 
+        observerList.Add(o);
+    } 
+  
+    public void unregisterObserver(Observer o) { 
+        observerList.Remove(o); 
+    } 
+ 
+    public void notifyObservers() 
+    { 
+        for (int i = 0; i < observerList.Count; i++){
+            observerList[i].updateFromSubject();
+        }
+    } 
+
+    public void notifyObservers(object o){
+        for (int i = 0; i < observerList.Count; i++){
+            observerList[i].updateFromSubject(o);
+        }
     }
 
 }
