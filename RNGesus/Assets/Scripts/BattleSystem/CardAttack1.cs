@@ -8,13 +8,20 @@ public class CardAttack1 : BaseCard
     public CardAttack1()
     {
         this.name = "Rush";
-        this.defaultVal = 10;
+        this.value = 10;
         this.Type = "Attack";
     }
 
-    void Roll(int roll)
-    {
-        this.value = roll * 10;
+    public override void useCard()
+    {Debug.Log("You selected the "); // ensure you picked right object
+        switch(this.UserType){
+            case("Player"):
+                this.CardTargets[0].GetComponent<EnemyStateMachine>().subtractHP(this.value);
+                break;
+            case("Enemy"):
+                this.CardTargets[0].GetComponent<PlayerStateMachine>().subtractHP(this.value);
+                break;
+        }
     }
 
 };

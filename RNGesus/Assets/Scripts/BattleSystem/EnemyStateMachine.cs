@@ -69,16 +69,19 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         }
     }
 
+    //method to randomly generate enemy action
     void chooseAction(){
     
         HandleTurn myAttack = new HandleTurn();
         myAttack.Attacker = enemy.name;
         myAttack.Type = "Enemy";
         myAttack.AttackersGameObject = this.gameObject;
-        myAttack.AttackersTarget = BSM.PlayerCharacters[Random.Range(0, BSM.PlayerCharacters.Count)];
+        myAttack.AttackersTargets.Add(BSM.PlayerCharacters[Random.Range(0, BSM.PlayerCharacters.Count)]);
+        myAttack.cardToUse = new CardAttack1();
         BSM.collectActions(myAttack);
     }
 
+    //coroutine to move to attack
     private IEnumerator TimeForAction(){
         if (actionStarted){
             yield break;
@@ -94,7 +97,7 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         //wait
         yield return new WaitForSeconds(1.5f);
         //do damage
-
+        
         //animate back to start position
         Vector3 firstPosition = startPosition;
          while (MoveTowardsStart(firstPosition)){
@@ -114,7 +117,8 @@ public class EnemyStateMachine : MonoBehaviour, Subject
             BSM.switchTurns();
         }
     }
-
+    
+    //methods to move Enemy
     private bool MoveTowardsEnemy(Vector3 target){
 
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
@@ -135,7 +139,7 @@ public class EnemyStateMachine : MonoBehaviour, Subject
          this.GetComponent<Renderer>().material.color = startcolor;
     }
 
-    //methods that must be implement to inherit from interface 'Subject'
+    //methods that must be implement to inherit from interface 'Subject' Observable Design Pattern
     public void registerObserver(Observer o) { 
         observerList.Add(o);
     } 
@@ -155,6 +159,15 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         for (int i = 0; i < observerList.Count; i++){
             observerList[i].updateFromSubject(o);
         }
+    }
+
+    //methods to manipulate HP
+    public void subtractHP(float input){
+        this.enemy.currentHP -= input;
+    }
+
+    public void addHP(float input){
+        this.enemy.currentHP += input;
     }
 
 }

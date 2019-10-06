@@ -61,7 +61,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
         this.turn = Turn.ENEMY;
         this.battleStates = PerformAction.WAIT;
-        this.playerInput = PlayerGUI.WAITING;
+        this.playerInput = PlayerGUI.IDLE;
 
         this.cardsLoaded = false;
         this.playerSelected = false;
@@ -74,21 +74,23 @@ public class BattleStateMachine : MonoBehaviour, Observer
         //switch on battleState
         switch (battleStates)
         {
+            //exit waiting state when the perform list is populated(either player or enemy have chosen a move)
             case (PerformAction.WAIT):
                 if(PerformList.Count > 0){
                     battleStates = PerformAction.TAKEACTION;
                 }
                 break;
+            //perform the action until perform list is empty again (then switch to waiting state)
             case (PerformAction.TAKEACTION):
                 GameObject performer = GameObject.Find(PerformList[0].Attacker);
                 if(PerformList[0].Type == "Enemy"){
                     EnemyStateMachine ESM = performer.GetComponent<EnemyStateMachine> ();
-                    ESM.playerToAttack = PerformList[0].AttackersTarget;
+                    ESM.playerToAttack = PerformList[0].AttackersTargets[0];
                     ESM.currentState = EnemyStateMachine.TurnState.ACTION;
                 }
                 if(PerformList[0].Type == "Player"){
                     PlayerStateMachine PSM = performer.GetComponent<PlayerStateMachine>();
-                    PSM.enemyToAttack = PerformList[0].AttackersTarget;
+                    PSM.enemyToAttack = PerformList[0].AttackersTargets[0];
                     PSM.currentState = PlayerStateMachine.TurnState.ACTION;
                 }
                 if (PerformList.Count == 0) {
@@ -99,31 +101,32 @@ public class BattleStateMachine : MonoBehaviour, Observer
                 break;
         }
         switch (playerInput){
+            //waiting on choosing the acting player
             case (PlayerGUI.WAITING):
-               if (this.turn == Turn.PLAYER){
-                   if (playerSelected != true){
-                        for (int i = 0; i < this.PlayerCharacters.Count; i++){
-                            if(PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved != true){
-                                this.playerSelected = true;
-                                selectedPlayer = PlayerCharacters[i];
-                                selectedPlayer.GetComponent<PlayerStateMachine>().highlight();
+                if (playerSelected != true){
+                    for (int i = 0; i < this.PlayerCharacters.Count; i++){
+                        if(PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved != true){
+                            this.playerSelected = true;
+                            selectedPlayer = PlayerCharacters[i];
+                            selectedPlayer.GetComponent<PlayerStateMachine>().highlight();
 
-                                List<BaseCard> cardList = selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards;
-                                this.CardInfo.Clear();
-                                for (int j = 0; j < selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards.Count; j++){
-                                    //TODO add cards from player onto the GUI
-                                    this.CardInfo.Add(selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards[j]);
-                                }
-                                cardsLoaded = true;
-                                break;
+                            List<BaseCard> cardList = selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards;
+                            this.CardInfo.Clear();
+                            for (int j = 0; j < selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards.Count; j++){
+                                //TODO add cards from player onto the GUI
+                                this.CardInfo.Add(selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards[j]);
                             }
+                            cardsLoaded = true;
+                            break;
                         }
                     }
-                   this.playerInput = PlayerGUI.INPUT;
-               }
+                }
+                this.playerInput = PlayerGUI.INPUT;
                 break;
+            //waiting on player input(choose card)
             case (PlayerGUI.INPUT):
                break;
+            //waiting on chosen targets for card
             case (PlayerGUI.SELECTING):
                 /*
                 //highlight enemy on mouse over
@@ -143,8 +146,8 @@ public class BattleStateMachine : MonoBehaviour, Observer
                         }
                     }
                  }
- 
                 break;
+            //sending an action to the perform action queue based on selected parameters(player, card, enemy(s))
             case (PlayerGUI.ACTION):
                 this.performAction();
                 selectedPlayer.GetComponent<PlayerStateMachine>().moved = true;
@@ -160,9 +163,9 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     this.playerInput = PlayerGUI.IDLE;
                 }
                break;
+            //all players have moved so switch turns
             case (PlayerGUI.DONE):
                this.switchTurns();
-               this.playerInput = PlayerGUI.WAITING;
                break;
             case (PlayerGUI.IDLE):
                 break;
@@ -186,6 +189,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
             this.cardsLoaded = false;
             this.targetsSelected = false;
             this.turn = Turn.ENEMY;
+            this.playerInput = PlayerGUI.IDLE;
         }
         else if(this.turn == Turn.ENEMY){
             for(int i = 0; i < this.EnemyCharacters.Count; i++){
@@ -243,15 +247,17 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
     //add action to queue based on current selected player, card, and enemy
     private void performAction(){
-    
         HandleTurn myAttack = new HandleTurn();
         myAttack.Attacker = selectedPlayer.GetComponent<PlayerStateMachine>().player.name;
         myAttack.Type = "Player";
         myAttack.AttackersGameObject = selectedPlayer;
-        myAttack.AttackersTarget = selectedTargets[0];
+        myAttack.AttackersTargets  = selectedTargets;
+        myAttack.cardToUse = selectedCard;
+        myAttack.populateCard();
         this.collectActions(myAttack);
     }
 
+    //detects if mouse is pointing to an object and saves it in variable hitObject
     public bool detectHitObject(){
         RaycastHit hit; 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
@@ -265,11 +271,11 @@ public class BattleStateMachine : MonoBehaviour, Observer
         }
     }
 
-    //TODO methods that must be implemented because of interface observer
-
+    //methods that must be implemented because this implements interface observer
     public void updateFromSubject(){
 
     }
+
     public void updateFromSubject(object o){
         if (o.GetType() == typeof(string)){
         //different case based on string passed in

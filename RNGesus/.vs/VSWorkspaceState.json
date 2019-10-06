@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Assets",
-    "\\Assets\\Scripts"
+    "\\Assets\\Scripts",
+    "\\Assets\\Scripts\\BattleSystem"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\BattleStateMachine.cs",
+  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\EnemyStateMachine.cs",
   "PreviewInSolutionExplorer": false
 }

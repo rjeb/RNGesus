@@ -79,16 +79,18 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         }
     }
 
+    //method to randomly generate player action
     void chooseAction(){
-    
         HandleTurn myAttack = new HandleTurn();
         myAttack.Attacker = player.name;
         myAttack.Type = "Player";
         myAttack.AttackersGameObject = this.gameObject;
-        myAttack.AttackersTarget = BSM.EnemyCharacters[Random.Range(0, BSM.EnemyCharacters.Count)];
+        myAttack.AttackersTargets.Add(BSM.EnemyCharacters[Random.Range(0, BSM.EnemyCharacters.Count)]);
+        myAttack.cardToUse = new CardAttack1();
         BSM.collectActions(myAttack);
     }
 
+    //coroutine to move to attack
     private IEnumerator TimeForAction(){
         if (actionStarted){
             yield break;
@@ -104,7 +106,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         //wait
         yield return new WaitForSeconds(1.5f);
         //do damage
-
+        BSM.selectedCard.useCard();
         //animate back to start position
         Vector3 firstPosition = startPosition;
          while (MoveTowardsStart(firstPosition)){
@@ -124,6 +126,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         this.notifyObservers("PlayerActionDone1");
     }
 
+    //methods to move player
     private bool MoveTowardsPlayer(Vector3 target){
 
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
@@ -144,7 +147,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
     }
 
 
-    //methods that must be implement to inherit from interface 'Subject'
+    //methods that must be implement to inherit from interface 'Subject' (Observable design pattern)
     public void registerObserver(Observer o) { 
         observerList.Add(o);
     } 
@@ -164,6 +167,15 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         for (int i = 0; i < observerList.Count; i++){
             observerList[i].updateFromSubject(o);
         }
+    }
+
+    //methods to manipulate HP
+    public void subtractHP(float input){
+        this.player.currentHP -= input;
+    }
+
+    public void addHP(float input){
+        this.player.currentHP += input;
     }
 
 }
