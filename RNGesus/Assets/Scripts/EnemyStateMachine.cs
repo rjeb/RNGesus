@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour
+public class EnemyStateMachine : MonoBehaviour, Subject
 {
     public BaseEnemy enemy;
 
@@ -10,10 +10,16 @@ public class EnemyStateMachine : MonoBehaviour
     private Vector3 startPosition;
     public bool moved = false;
 
+    //selection variables
+    private Color startcolor;
+
     //TimeForAction variables
     private bool actionStarted = false;
     public GameObject playerToAttack;
     private float animSpeed = 5f;
+
+    //Subject variables
+    List<Observer> observerList; 
 
     public enum TurnState
     {
@@ -32,6 +38,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         startPosition = transform.position;
+        observerList = new List<Observer>(); 
     }
 
     // Update is called once per frame
@@ -118,5 +125,36 @@ public class EnemyStateMachine : MonoBehaviour
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
     
+    //methods to change the color of the player character
+    public void highlight(){
+         startcolor = this.GetComponent<Renderer>().material.color;
+         this.GetComponent<Renderer>().material.color = Color.grey;
+    }
+
+    public void dehighlight(){
+         this.GetComponent<Renderer>().material.color = startcolor;
+    }
+
+    //methods that must be implement to inherit from interface 'Subject'
+    public void registerObserver(Observer o) { 
+        observerList.Add(o);
+    } 
+  
+    public void unregisterObserver(Observer o) { 
+        observerList.Remove(o); 
+    } 
+ 
+    public void notifyObservers() 
+    { 
+        for (int i = 0; i < observerList.Count; i++){
+            observerList[i].updateFromSubject();
+        }
+    } 
+
+    public void notifyObservers(object o){
+        for (int i = 0; i < observerList.Count; i++){
+            observerList[i].updateFromSubject(o);
+        }
+    }
 
 }

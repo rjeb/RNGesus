@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : MonoBehaviour, Subject
 {
     public BasePlayerCharacter player;
 
@@ -11,10 +11,16 @@ public class PlayerStateMachine : MonoBehaviour
     private Vector3 startPosition;
     public bool moved = false;
 
+    //selection variables
+     private Color startcolor;
+
     //TimeForAction variables
     private bool actionStarted = false;
     public GameObject enemyToAttack;
     private float animSpeed = 5f;
+
+    //Subject variables
+    List<Observer> observerList; 
 
     public enum TurnState
     {
@@ -34,6 +40,10 @@ public class PlayerStateMachine : MonoBehaviour
         BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         startPosition = transform.position;
         currentState = TurnState.IDLE;
+        observerList = new List<Observer>(); 
+        
+        //generate 3 default cards for each player
+        //TODO, add cards from a saved character state
         for (int i = 0; i < 3; i++)
         {
             CardAttack1 Card1 = new CardAttack1();
@@ -109,6 +119,9 @@ public class PlayerStateMachine : MonoBehaviour
 
         moved = true;
         currentState = TurnState.MOVED;
+
+        //notify the battle state machine that this player is done acting
+        this.notifyObservers("PlayerActionDone1");
     }
 
     private bool MoveTowardsPlayer(Vector3 target){
@@ -121,5 +134,36 @@ public class PlayerStateMachine : MonoBehaviour
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
 
+    //methods to change the color of the player character
+    public void highlight(){
+         startcolor = this.GetComponent<Renderer>().material.color;
+         this.GetComponent<Renderer>().material.color = Color.grey;
+    }
+    public void dehighlight(){
+         this.GetComponent<Renderer>().material.color = startcolor;
+    }
+
+
+    //methods that must be implement to inherit from interface 'Subject'
+    public void registerObserver(Observer o) { 
+        observerList.Add(o);
+    } 
+  
+    public void unregisterObserver(Observer o) { 
+        observerList.Remove(o); 
+    } 
+ 
+    public void notifyObservers() 
+    { 
+        for (int i = 0; i < observerList.Count; i++){
+            observerList[i].updateFromSubject();
+        }
+    } 
+
+    public void notifyObservers(object o){
+        for (int i = 0; i < observerList.Count; i++){
+            observerList[i].updateFromSubject(o);
+        }
+    }
 
 }

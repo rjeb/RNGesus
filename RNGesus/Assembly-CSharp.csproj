@@ -70,8 +70,10 @@
     <Compile Include="Assets\Scripts\CardButton.cs" />
     <Compile Include="Assets\Scripts\EnemyStateMachine.cs" />
     <Compile Include="Assets\Scripts\HandleTurn.cs" />
+    <Compile Include="Assets\Scripts\Observer.cs" />
     <Compile Include="Assets\Scripts\OverworldHandler.cs" />
     <Compile Include="Assets\Scripts\PlayerStateMachine.cs" />
+    <Compile Include="Assets\Scripts\Subject.cs" />
     <Compile Include="Assets\Scripts\TestFoler\PlayerController.cs" />
     <Compile Include="Assets\Scripts\TestFoler\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\TileBasedController.cs" />

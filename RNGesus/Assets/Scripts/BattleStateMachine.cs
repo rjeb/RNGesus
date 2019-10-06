@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleStateMachine : MonoBehaviour
+public class BattleStateMachine : MonoBehaviour, Observer
 {
     public enum Turn{
         PLAYER,
@@ -22,6 +22,7 @@ public class BattleStateMachine : MonoBehaviour
         SELECTING,
         ACTION,
         DONE,
+        IDLE
     }
 
     public PerformAction battleStates;
@@ -43,16 +44,27 @@ public class BattleStateMachine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        //populate all lists with corresponding GameObjects
+        EnemyCharacters.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+        PlayerCharacters.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+        CardButtons.AddRange(GameObject.FindGameObjectsWithTag("CardButton"));
+
+        //add BattleStateMachine as an observer for all enemies and players
+        for(int i = 0; i < EnemyCharacters.Count; i++){
+            EnemyCharacters[i].GetComponent<EnemyStateMachine>().registerObserver(this);
+        }
+
+        for(int i = 0; i < PlayerCharacters.Count; i++){
+            PlayerCharacters[i].GetComponent<PlayerStateMachine>().registerObserver(this);
+        }
+
         this.turn = Turn.ENEMY;
         this.battleStates = PerformAction.WAIT;
         this.playerInput = PlayerGUI.WAITING;
 
         this.cardsLoaded = false;
         this.playerSelected = false;
-
-        EnemyCharacters.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
-        PlayerCharacters.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-        CardButtons.AddRange(GameObject.FindGameObjectsWithTag("CardButton"));
     }
 
     // Update is called once per frame
@@ -94,6 +106,7 @@ public class BattleStateMachine : MonoBehaviour
                             if(PlayerCharacters[i].GetComponent<PlayerStateMachine>().moved != true){
                                 this.playerSelected = true;
                                 selectedPlayer = PlayerCharacters[i];
+                                selectedPlayer.GetComponent<PlayerStateMachine>().highlight();
 
                                 List<BaseCard> cardList = selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards;
                                 this.CardInfo.Clear();
@@ -113,17 +126,14 @@ public class BattleStateMachine : MonoBehaviour
                break;
             case (PlayerGUI.SELECTING):
                 /*
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100)){
-                    Debug.DrawLine(ray.origin, hit.point);
-                    hitObject = hit.transform.gameObject;
-                    //hit.transform.gameObject.GetComponent<EnemyStateMachine>().enabled = false;
-                    EnemyStateMachine tmp = hitObject.GetComponent<EnemyStateMachine>();
-                    if (tmp != null){
-                        selectEnemy(EnemyCharacters.IndexOf(hitObject));
+                //highlight enemy on mouse over
+                if (this.detectHitObject() == true){
+                        EnemyStateMachine tmp = hitObject.GetComponent<EnemyStateMachine>();
+                        if (tmp != null){
+                            tmp.highlight();
+                            //tmp.dehighlight();
+                        }
                     }
-                }
                 */
                 if ( Input.GetMouseButtonDown (0)){ 
                     if (this.detectHitObject() == true){
@@ -138,6 +148,7 @@ public class BattleStateMachine : MonoBehaviour
             case (PlayerGUI.ACTION):
                 this.performAction();
                 selectedPlayer.GetComponent<PlayerStateMachine>().moved = true;
+
                 //if every player has moved, proceed to switch turns to Enemy Turn
                 if(this.allPlayersMoved() == true){
                     this.playerInput = PlayerGUI.DONE;
@@ -146,13 +157,15 @@ public class BattleStateMachine : MonoBehaviour
                     this.playerSelected = false;
                     this.cardsLoaded = false;
                     this.targetsSelected = false;
-                    this.playerInput = PlayerGUI.WAITING;
+                    this.playerInput = PlayerGUI.IDLE;
                 }
                break;
             case (PlayerGUI.DONE):
                this.switchTurns();
                this.playerInput = PlayerGUI.WAITING;
                break;
+            case (PlayerGUI.IDLE):
+                break;
         }
     }
 
@@ -223,11 +236,9 @@ public class BattleStateMachine : MonoBehaviour
 
     //select the enemy with index cardNum
     public void selectEnemy(int enemyNum){
-        if (this.playerInput == PlayerGUI.SELECTING){
             selectedTargets.Clear();
             selectedTargets.Add(this.EnemyCharacters[enemyNum]);
-            this.playerInput = PlayerGUI.ACTION;  
-        }
+            this.playerInput = PlayerGUI.ACTION;
     }
 
     //add action to queue based on current selected player, card, and enemy
@@ -254,4 +265,21 @@ public class BattleStateMachine : MonoBehaviour
         }
     }
 
+    //TODO methods that must be implemented because of interface observer
+
+    public void updateFromSubject(){
+
+    }
+    public void updateFromSubject(object o){
+        if (o.GetType() == typeof(string)){
+        //different case based on string passed in
+            switch((string)o){
+                case("PlayerActionDone1"):
+                    //deselect the player and move on to the next state, allowing the next player to be selected
+                    this.selectedPlayer.GetComponent<PlayerStateMachine>().dehighlight();
+                    this.playerInput = PlayerGUI.WAITING;
+                    break;
+            }    
+        }
+    }
 }
