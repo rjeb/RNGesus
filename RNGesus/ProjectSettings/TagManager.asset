@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - CardButton
+  - TextUI
   layers:
   - Default
   - TransparentFX

@@ -8,11 +8,15 @@ public class BaseCard
     public string name;
     public float value;
     public string Type; //type of Card: Attack, Support, etc.
+    public string desc; //description of the card
 
     public string User; //name of Attacker
     public string UserType; //Type of User: Player, Enemy
     public GameObject UserGameObject; //the user game object
     public List<GameObject> CardTargets; //who is being targeted by the card
+
+    //Image associated with card
+    public GameObject CardImage;
 
     //override this
     public virtual void useCard(){

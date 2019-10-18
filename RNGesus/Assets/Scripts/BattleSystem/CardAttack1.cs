@@ -8,8 +8,9 @@ public class CardAttack1 : BaseCard
     public CardAttack1()
     {
         this.name = "Rush";
-        this.value = 10;
+        this.value = 50;
         this.Type = "Attack";
+        this.desc = "Target 1 enemy and deal 10 damage";
     }
 
     public override void useCard()

@@ -18,6 +18,8 @@ public class BaseEnemy
     public float baseDef;
     public float currentDef;
 
+    public List<BaseCard> Cards;
+
     int strenth;
     int magic;
     int dexterity;

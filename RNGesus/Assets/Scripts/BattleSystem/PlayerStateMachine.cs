@@ -37,18 +37,15 @@ public class PlayerStateMachine : MonoBehaviour, Subject
     // Start is called before the first frame update
     void Start()
     {
-        BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
-        startPosition = transform.position;
-        currentState = TurnState.IDLE;
-        observerList = new List<Observer>(); 
+        this.BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
+        this.startPosition = transform.position;
+        this.currentState = TurnState.IDLE;
+        this.observerList = new List<Observer>(); 
         
-        //generate 3 default cards for each player
-        //TODO, add cards from a saved character state
-        for (int i = 0; i < 3; i++)
-        {
-            CardAttack1 Card1 = new CardAttack1();
-            player.Cards.Add(Card1);
-        } 
+        //if playerCardList is empty, generate new list of cards
+        if (this.player.Cards.Count == 0){
+            this.generateCards();
+        }
 }
 
     // Update is called once per frame
@@ -99,14 +96,15 @@ public class PlayerStateMachine : MonoBehaviour, Subject
 
         //animate the player near the enemy to attack
         yield return new WaitForSeconds(1.0f);
-        Vector3 enemyPosition = new Vector3(enemyToAttack.transform.position.x - 1.5f, enemyToAttack.transform.position.y, enemyToAttack.transform.position.z);
+        Vector3 enemyPosition = new Vector3(enemyToAttack.transform.position.x - 1.5f, this.startPosition.y, enemyToAttack.transform.position.z);
         while (MoveTowardsPlayer(enemyPosition)){
             yield return null;
         }
         //wait
         yield return new WaitForSeconds(1.5f);
         //do damage
-        BSM.selectedCard.useCard();
+        BSM.PerformList[0].cardToUse.useCard();
+        this.usedCard(BSM.PerformList[0].cardToUse);
         //animate back to start position
         Vector3 firstPosition = startPosition;
          while (MoveTowardsStart(firstPosition)){
@@ -140,7 +138,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
     //methods to change the color of the player character
     public void highlight(){
          startcolor = this.GetComponent<Renderer>().material.color;
-         this.GetComponent<Renderer>().material.color = Color.grey;
+         this.GetComponent<Renderer>().material.color = Color.yellow;
     }
     public void dehighlight(){
          this.GetComponent<Renderer>().material.color = startcolor;
@@ -172,10 +170,39 @@ public class PlayerStateMachine : MonoBehaviour, Subject
     //methods to manipulate HP
     public void subtractHP(float input){
         this.player.currentHP -= input;
+        if (this.player.currentHP <= 0){
+            this.player.currentHP = 0;
+            this.currentState = TurnState.DEAD;
+        }
     }
 
     public void addHP(float input){
         this.player.currentHP += input;
     }
 
+    //methods to populate Card List
+    
+    //default generator if no inputs are given
+    public void generateCards(){
+        for (int i = 0; i < 30; i++)
+        {
+            CardAttack1 tmp = new CardAttack1();
+            this.player.Cards.Add(tmp);
+        } 
+    }
+
+    //sets Card List to incoming list if given
+    public void generateCards(List<BaseCard> input){
+        this.player.Cards.Clear();
+        this.player.Cards = input;
+    }
+
+    public void usedCard(int i){
+        this.player.Cards.RemoveAt(i);
+    }
+
+    public void usedCard(BaseCard cardInput){
+        this.player.Cards.Remove(cardInput);
+        Debug.Log("Used card: " + cardInput.name);
+    }
 }

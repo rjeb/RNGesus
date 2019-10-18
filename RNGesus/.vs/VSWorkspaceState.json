@@ -3,8 +3,9 @@
     "",
     "\\Assets",
     "\\Assets\\Scripts",
-    "\\Assets\\Scripts\\BattleSystem"
+    "\\Assets\\Scripts\\BattleSystem",
+    "\\Assets\\Scripts\\SceneScripts"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\EnemyStateMachine.cs",
+  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\BattleStateMachine.cs",
   "PreviewInSolutionExplorer": false
 }
