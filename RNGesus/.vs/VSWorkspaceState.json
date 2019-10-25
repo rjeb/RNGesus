@@ -4,8 +4,11 @@
     "\\Assets",
     "\\Assets\\Scripts",
     "\\Assets\\Scripts\\BattleSystem",
-    "\\Assets\\Scripts\\SceneScripts"
+    "\\Assets\\Scripts\\MiscScripts",
+    "\\Assets\\Scripts\\SceneScripts",
+    "\\Assets\\Tests",
+    "\\Assets\\Tests\\PlayModeTests"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\BattleStateMachine.cs",
+  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\EnemyStateMachine.cs",
   "PreviewInSolutionExplorer": false
 }

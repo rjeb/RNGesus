@@ -20,7 +20,17 @@ public class TitleScreen : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene(newGameScene);
+        List<string> playerStrings = new List<string>();
+        List<string> enemyStrings = new List<string>();
+        playerStrings.Add("Assets/Prefabs/Characters/Jesus.prefab");
+        playerStrings.Add("Assets/Prefabs/Characters/Mary.prefab");
+
+        enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon1.prefab");
+        enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon2.prefab");
+
+        CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
+
+        //SceneManager.LoadScene(newGameScene);
     }
 
     public void QuitGame()

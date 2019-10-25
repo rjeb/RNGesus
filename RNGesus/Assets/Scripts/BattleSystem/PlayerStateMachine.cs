@@ -41,6 +41,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         this.startPosition = transform.position;
         this.currentState = TurnState.IDLE;
         this.observerList = new List<Observer>(); 
+        this.startcolor = this.GetComponent<Renderer>().material.color;
         
         //if playerCardList is empty, generate new list of cards
         if (this.player.Cards.Count == 0){
@@ -137,7 +138,6 @@ public class PlayerStateMachine : MonoBehaviour, Subject
 
     //methods to change the color of the player character
     public void highlight(){
-         startcolor = this.GetComponent<Renderer>().material.color;
          this.GetComponent<Renderer>().material.color = Color.yellow;
     }
     public void dehighlight(){
@@ -147,6 +147,14 @@ public class PlayerStateMachine : MonoBehaviour, Subject
 
     //methods that must be implement to inherit from interface 'Subject' (Observable design pattern)
     public void registerObserver(Observer o) { 
+        if (observerList == null)
+        {
+            Debug.Log("PLAYER OBSERVER LIST IS NULL");
+        }
+        else
+        {
+            Debug.Log("PLAYER OBSERVER LIST ISNT NULL");
+        }
         observerList.Add(o);
     } 
   

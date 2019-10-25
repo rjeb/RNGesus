@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\BattleSystem\PlayerStateMachine.cs" />
     <Compile Include="Assets\Scripts\Interfaces\Observer.cs" />
     <Compile Include="Assets\Scripts\Interfaces\Subject.cs" />
+    <Compile Include="Assets\Scripts\MiscScripts\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\SceneScripts\LevelSelector.cs" />
     <Compile Include="Assets\Scripts\SceneScripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SceneScripts\TileBasedController.cs" />

@@ -39,10 +39,20 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         this.BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         this.startPosition = transform.position;
         this.observerList = new List<Observer>(); 
+        this.startcolor = this.GetComponent<Renderer>().material.color;
         
         //if enemyCardList is empty, generate new list of cards
         if (this.enemy.Cards.Count == 0){
             this.generateCards();
+        }
+
+        if (observerList == null)
+        {
+            Debug.Log("OBSERVER LIST IS NULL");
+        }
+        else
+        {
+            Debug.Log("OBSERVER LIST ISNT NULL");
         }
 
     }
@@ -151,7 +161,6 @@ public class EnemyStateMachine : MonoBehaviour, Subject
     
     //methods to change the color of the player character
     public void highlight(){
-         startcolor = this.GetComponent<Renderer>().material.color;
          this.GetComponent<Renderer>().material.color = Color.grey;
     }
 
@@ -160,7 +169,15 @@ public class EnemyStateMachine : MonoBehaviour, Subject
     }
 
     //methods that must be implement to inherit from interface 'Subject' Observable Design Pattern
-    public void registerObserver(Observer o) { 
+    public void registerObserver(Observer o) {
+        if (observerList == null)
+        {
+            Debug.Log("ENEMY OBSERVER LIST IS NULL");
+        }
+        else
+        {
+            Debug.Log("ENEMY OBSERVER LIST ISNT NULL");
+        }
         observerList.Add(o);
     } 
   

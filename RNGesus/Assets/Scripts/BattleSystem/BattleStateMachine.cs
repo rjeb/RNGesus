@@ -51,14 +51,17 @@ public class BattleStateMachine : MonoBehaviour, Observer
     public string titleScene;
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
+        instantiateScene();
 
         //populate all lists with corresponding GameObjects
         EnemyCharacters.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
         PlayerCharacters.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         CardButtons.AddRange(GameObject.FindGameObjectsWithTag("CardButton"));
         TextUI = GameObject.FindGameObjectWithTag("TextUI");
+
+        yield return null;
 
         //add BattleStateMachine as an observer for all enemies and players
         for(int i = 0; i < EnemyCharacters.Count; i++){
@@ -93,7 +96,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
                 break;
             //perform the action until perform list is empty again (then switch to waiting state)
             case (PerformAction.TAKEACTION):
-                GameObject performer = GameObject.Find(PerformList[0].Attacker);
+                GameObject performer = GameObject.Find(PerformList[0].AttackersGameObject.name);
                 if(PerformList[0].Type == "Enemy"){
                     EnemyStateMachine ESM = performer.GetComponent<EnemyStateMachine> ();
                     ESM.playerToAttack = PerformList[0].AttackersTargets[0];
@@ -290,10 +293,26 @@ public class BattleStateMachine : MonoBehaviour, Observer
         List<BaseCard> tmpCards = selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards;
         if (tmpCards.Count >= 3){
             for (int i = 0; i < 3; i++){
-                Sprite cardSprite = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Images/CardImages/Attack1.png", typeof(Sprite));
+                Sprite cardSprite1 = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Art/Sprites/UI/CardAttack.png", typeof(Sprite));
+                Sprite cardSprite2 = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Art/Sprites/UI/CardDefend.png", typeof(Sprite));
+                Sprite cardSprite3 = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Art/Sprites/UI/CardHeal.png", typeof(Sprite));
+                Sprite cardSprite4 = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Art/Sprites/UI/CardDebuff.png", typeof(Sprite));
+                Sprite cardSprite5 = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Art/Sprites/UI/CardMiracle.png", typeof(Sprite));
                 //Sprite cardSprite = Resources.Load<Sprite>("Images/CardImages/Attack1");
                 if(tmpCards[i].Type == "Attack"){
-                    CardButtons[i].GetComponent<UnityEngine.UI.Image>().sprite = cardSprite;
+                    CardButtons[i].GetComponent<UnityEngine.UI.Image>().sprite = cardSprite1;
+                }
+                else if(tmpCards[i].Type == "Defend"){
+                    CardButtons[i].GetComponent<UnityEngine.UI.Image>().sprite = cardSprite2;
+                }
+                else if(tmpCards[i].Type == "Heal"){
+                    CardButtons[i].GetComponent<UnityEngine.UI.Image>().sprite = cardSprite3;
+                }
+                else if(tmpCards[i].Type == "Debuff"){
+                    CardButtons[i].GetComponent<UnityEngine.UI.Image>().sprite = cardSprite4;
+                }
+                else if(tmpCards[i].Type == "Special"){
+                    CardButtons[i].GetComponent<UnityEngine.UI.Image>().sprite = cardSprite5;
                 }
             }
         }
@@ -360,6 +379,44 @@ public class BattleStateMachine : MonoBehaviour, Observer
         }
         else{
             return false;
+        }
+    }
+
+    public void instantiateScene(){
+        //set up lists
+        List<string> playerStrings = CharacterManager.getCharacters();
+        List<string> enemyStrings = CharacterManager.getEnemys();
+
+        //populate Lists
+        for(int i = 0; i < playerStrings.Count; i++){
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(playerStrings[i], typeof(GameObject)), new Vector3(-3 + (0.5f * i), 1, 0 + (1 * i)), Quaternion.identity);
+        }
+
+        for(int i = 0; i < enemyStrings.Count; i++){
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(4 + (-0.5f * i), 1, 0 + (1 * i)), Quaternion.identity);
+        }
+    }
+
+    public void populateLists(){
+
+        //clear all lists
+        EnemyCharacters.Clear();
+        PlayerCharacters.Clear();
+        CardButtons.Clear();
+
+        //populate all lists with corresponding GameObjects
+        EnemyCharacters.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+        PlayerCharacters.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+        CardButtons.AddRange(GameObject.FindGameObjectsWithTag("CardButton"));
+        TextUI = GameObject.FindGameObjectWithTag("TextUI");
+
+        //add BattleStateMachine as an observer for all enemies and players
+        for(int i = 0; i < EnemyCharacters.Count; i++){
+            EnemyCharacters[i].GetComponent<EnemyStateMachine>().registerObserver(this);
+        }
+
+        for(int i = 0; i < PlayerCharacters.Count; i++){
+            PlayerCharacters[i].GetComponent<PlayerStateMachine>().registerObserver(this);
         }
     }
 
