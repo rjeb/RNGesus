@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LevelSelector : MonoBehaviour
 {
+    public string newGameScene;
+
     public Button[] levelButtons;
 
     void Start()
@@ -14,8 +18,18 @@ public class LevelSelector : MonoBehaviour
         }*/
     }
 
-    public void Select(string levelName)
+    public void Select()
     {
-        SceneManager.LoadScene(levelName);
+        List<string> playerStrings = new List<string>();
+        List<string> enemyStrings = new List<string>();
+        playerStrings.Add("Assets/Prefabs/Characters/Jesus.prefab");
+        playerStrings.Add("Assets/Prefabs/Characters/Mary.prefab");
+
+        enemyStrings.Add("Assets/Prefabs/Enemies/Pontius.prefab");
+        enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon1.prefab");
+        enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon2.prefab");
+
+        CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
+        //SceneManager.LoadScene(levelName);
     }
 }

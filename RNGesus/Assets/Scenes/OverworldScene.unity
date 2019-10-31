@@ -261,6 +261,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 116622766}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &116622768 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8081224761233286857, guid: f3dc87109fde5a24c97c39368e5754b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 116622766}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &117868545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -704,6 +716,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 767107563}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &767107565 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8081224761233286857, guid: f3dc87109fde5a24c97c39368e5754b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 767107563}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1146783212
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,9 +859,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33daca7dd854bef4a9646bf1397003bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newGameScene: BattleSceneTemplate
   levelButtons:
   - {fileID: 1596055232}
   - {fileID: 585940196}
+  - {fileID: 116622768}
+  - {fileID: 767107565}
 --- !u!4 &1375803180
 Transform:
   m_ObjectHideFlags: 0
@@ -41673,7 +41700,7 @@ PrefabInstance:
     - target: {fileID: 8081224761233286857, guid: f3dc87109fde5a24c97c39368e5754b3,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8081224761233286857, guid: f3dc87109fde5a24c97c39368e5754b3,
         type: 3}
