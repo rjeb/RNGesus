@@ -9,6 +9,6 @@
     "\\Assets\\Tests",
     "\\Assets\\Tests\\PlayModeTests"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\EnemyStateMachine.cs",
+  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\BattleStateMachine.cs",
   "PreviewInSolutionExplorer": false
 }

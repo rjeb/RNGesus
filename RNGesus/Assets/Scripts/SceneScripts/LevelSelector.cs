@@ -25,7 +25,7 @@ public class LevelSelector : MonoBehaviour
         playerStrings.Add("Assets/Prefabs/Characters/Jesus.prefab");
         playerStrings.Add("Assets/Prefabs/Characters/Mary.prefab");
 
-        enemyStrings.Add("Assets/Prefabs/Enemies/Pontius.prefab");
+        enemyStrings.Add("Assets/Prefabs/Enemies/Pontius Pilates.prefab");
         enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon1.prefab");
         enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon2.prefab");
 

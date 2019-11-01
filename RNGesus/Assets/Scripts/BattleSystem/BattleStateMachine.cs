@@ -393,7 +393,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
         }
 
         for(int i = 0; i < enemyStrings.Count; i++){
-            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(4 + (-0.5f * i), 1, 0 + (1 * i)), Quaternion.identity);
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(5 + (-1 * i), 2, 0 + (1 * i)), Quaternion.identity);
         }
     }
 

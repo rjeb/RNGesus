@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStateMachine : MonoBehaviour, Subject
 {
@@ -21,6 +22,10 @@ public class PlayerStateMachine : MonoBehaviour, Subject
 
     //Subject variables
     List<Observer> observerList; 
+
+    //health UI variables
+    public GameObject healthUI;
+    public Slider slider;
 
     public enum TurnState
     {
@@ -47,11 +52,15 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         if (this.player.Cards.Count == 0){
             this.generateCards();
         }
+
+        player.currentHP = player.baseHP;
+        slider.value = CalculateHealth();
 }
 
     // Update is called once per frame
     void Update()
     {
+
         switch (currentState)
         {   
             //Idle state before taking turns
@@ -175,6 +184,10 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         }
     }
 
+    float CalculateHealth(){
+        return player.currentHP / player.baseHP;
+    }
+
     //methods to manipulate HP
     public void subtractHP(float input){
         this.player.currentHP -= input;
@@ -182,10 +195,32 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             this.player.currentHP = 0;
             this.currentState = TurnState.DEAD;
         }
+
+        //health UI call
+        slider.value = CalculateHealth();
+
+        if (player.currentHP < player.baseHP){
+            healthUI.SetActive(true);
+        }
+
+        if (player.currentHP > player.baseHP){
+            player.currentHP = player.baseHP;
+        }
     }
 
     public void addHP(float input){
         this.player.currentHP += input;
+        
+        //health UI call
+        slider.value = CalculateHealth();
+
+        if (player.currentHP < player.baseHP){
+            healthUI.SetActive(true);
+        }
+
+        if (player.currentHP > player.baseHP){
+            player.currentHP = player.baseHP;
+        }
     }
 
     //methods to populate Card List

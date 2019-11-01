@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyStateMachine : MonoBehaviour, Subject
 {
@@ -20,6 +21,10 @@ public class EnemyStateMachine : MonoBehaviour, Subject
 
     //Subject variables
     List<Observer> observerList; 
+
+    //health UI variables
+    public GameObject healthUI;
+    public Slider slider;
 
     public enum TurnState
     {
@@ -54,6 +59,10 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         {
             Debug.Log("OBSERVER LIST ISNT NULL");
         }
+
+        //initialize hp & slider
+        enemy.currentHP = enemy.baseHP;
+        slider.value = CalculateHealth();
 
     }
 
@@ -198,6 +207,10 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         }
     }
 
+    float CalculateHealth(){
+        return enemy.currentHP / enemy.baseHP;
+    }
+
     //methods to manipulate HP
     public void subtractHP(float input){
         this.enemy.currentHP -= input;
@@ -205,10 +218,32 @@ public class EnemyStateMachine : MonoBehaviour, Subject
             this.enemy.currentHP = 0;
             this.currentState = TurnState.DEAD;
         }
+
+        //health UI call
+        slider.value = CalculateHealth();
+
+        if (enemy.currentHP < enemy.baseHP){
+            healthUI.SetActive(true);
+        }
+
+        if (enemy.currentHP > enemy.baseHP){
+            enemy.currentHP = enemy.baseHP;
+        }
     }
 
     public void addHP(float input){
         this.enemy.currentHP += input;
+
+        //health UI call
+        slider.value = CalculateHealth();
+
+        if (enemy.currentHP < enemy.baseHP){
+            healthUI.SetActive(true);
+        }
+     
+        if (enemy.currentHP > enemy.baseHP){
+            enemy.currentHP = enemy.baseHP;
+        }
     }
 
     //methods to populate Card List
