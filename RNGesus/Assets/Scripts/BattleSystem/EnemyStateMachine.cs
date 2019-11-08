@@ -128,7 +128,7 @@ public class EnemyStateMachine : MonoBehaviour, Subject
 
         //animate the enemy near the hero to attack
         yield return new WaitForSeconds(1.0f);
-        Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 1.5f, this.startPosition.y, playerToAttack.transform.position.z);
+        Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 4.5f, this.startPosition.y, playerToAttack.transform.position.z);
         while (MoveTowardsEnemy(playerPosition)){
             yield return null;
         }
