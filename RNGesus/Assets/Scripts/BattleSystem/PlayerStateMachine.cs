@@ -81,6 +81,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             case (TurnState.MOVED):
                 break;
             case (TurnState.DEAD):
+                transform.position = new Vector3(-100, -100, -100); //move out of game when dead
                 break;
 
         }

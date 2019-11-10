@@ -94,6 +94,7 @@ public class EnemyStateMachine : MonoBehaviour, Subject
             case (TurnState.MOVED):
                 break;
             case (TurnState.DEAD):
+                transform.position = new Vector3(-100, -100, -100); //move out of game when dead
                 break;
 
         }
@@ -114,7 +115,17 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         else{
             myAttack.cardToUse = this.enemy.Cards[Random.Range(0, this.enemy.Cards.Count - 1)];
         }
-        myAttack.AttackersTargets.Add(BSM.PlayerCharacters[Random.Range(0, BSM.PlayerCharacters.Count)]);
+        bool checkDead = true;
+        while (checkDead == true) {
+            GameObject tmp = (BSM.PlayerCharacters[Random.Range(0, BSM.PlayerCharacters.Count)]);
+            if (tmp.GetComponent<PlayerStateMachine>().currentState != PlayerStateMachine.TurnState.DEAD)
+            {
+                myAttack.AttackersTargets.Add(tmp);
+                checkDead = false;
+            } 
+
+        }
+        //myAttack.AttackersTargets.Add(BSM.PlayerCharacters[Random.Range(0, BSM.PlayerCharacters.Count)]);
         myAttack.populateCard();
         BSM.collectActions(myAttack);
     }
@@ -229,6 +240,7 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         if (enemy.currentHP > enemy.baseHP){
             enemy.currentHP = enemy.baseHP;
         }
+
     }
 
     public void addHP(float input){
