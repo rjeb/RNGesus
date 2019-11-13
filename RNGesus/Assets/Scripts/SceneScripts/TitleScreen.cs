@@ -20,6 +20,7 @@ public class TitleScreen : MonoBehaviour
 
     public void NewGame()
     {
+        /*
         List<string> playerStrings = new List<string>();
         List<string> enemyStrings = new List<string>();
         playerStrings.Add("Assets/Prefabs/Characters/Jesus.prefab");
@@ -29,8 +30,8 @@ public class TitleScreen : MonoBehaviour
         enemyStrings.Add("Assets/Prefabs/Enemies/BusinessGoon2.prefab");
 
         CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
-
-        //SceneManager.LoadScene(newGameScene);
+        */
+        SceneManager.LoadScene(newGameScene);
     }
 
     public void QuitGame()

@@ -1,0 +1,2 @@
+D:\projects\CS 160 Proj\RNGesus\RNGesus\obj\Debug\ScriptAssemblyDefs.csprojAssemblyReference.cache
+D:\projects\CS 160 Proj\RNGesus\RNGesus\obj\Debug\ScriptAssemblyDefs.csproj.CoreCompileInputs.cache

@@ -8,9 +8,9 @@ public class CardAttack1 : BaseCard
     public CardAttack1()
     {
         this.name = "Rush";
-        this.value = 50;
+        this.value = Random.Range(30,50);
         this.Type = "Attack";
-        this.desc = "Target 1 enemy and deal 10 damage";
+        this.desc = "Target 1 enemy and deal 30-50 damage";
     }
 
     public override void useCard()
