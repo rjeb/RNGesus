@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea29f591a6c26b34da9b54e1e9e2a81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGameScene: BattleSceneTemplate
+  newGameScene: OverworldScene
 --- !u!1 &378432109
 GameObject:
   m_ObjectHideFlags: 0

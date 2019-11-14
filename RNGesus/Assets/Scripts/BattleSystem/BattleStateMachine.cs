@@ -157,9 +157,17 @@ public class BattleStateMachine : MonoBehaviour, Observer
                 */
                 if ( Input.GetMouseButtonDown (0)){ 
                     if (this.detectHitObject2D() == true){
-                        EnemyStateMachine tmp = hitObject.GetComponent<EnemyStateMachine>();
-                        if (tmp != null){
-                            selectEnemy(EnemyCharacters.IndexOf(hitObject));
+                        if (selectedCard.Type == "Attack" || selectedCard.Type == "Special" || selectedCard.Type == "Debuff"){
+                            EnemyStateMachine tmp = hitObject.GetComponent<EnemyStateMachine>();
+                            if (tmp != null){
+                                selectEnemy(EnemyCharacters.IndexOf(hitObject));
+                            }
+                        }
+                        else if (selectedCard.Type == "Heal" || selectedCard.Type == "Special" || selectedCard.Type == "Defend"){
+                            PlayerStateMachine tmp = hitObject.GetComponent<PlayerStateMachine>();
+                            if (tmp != null){
+                                selectPlayer(PlayerCharacters.IndexOf(hitObject));
+                            }
                         }
                     }
                  }
@@ -320,9 +328,18 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
     //select the enemy with index cardNum
     public void selectEnemy(int enemyNum){
-            selectedTargets.Clear();
             selectedTargets.Add(this.EnemyCharacters[enemyNum]);
-            this.playerInput = PlayerGUI.ACTION;
+            if (selectedTargets.Count >= selectedCard.numTarget){
+                this.playerInput = PlayerGUI.ACTION;
+            }
+    }
+
+    //select the player with index cardNum
+    public void selectPlayer(int playerNum){
+            selectedTargets.Add(this.PlayerCharacters[playerNum]);
+            if (selectedTargets.Count >= selectedCard.numTarget){
+                this.playerInput = PlayerGUI.ACTION;
+            }
     }
 
     //add action to queue based on current selected player, card, and enemy
@@ -437,6 +454,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
             switch((string)o){
                 case("PlayerActionDone1"):
                     //deselect the player and move on to the next state, allowing the next player to be selected
+                    selectedTargets.Clear(); //deselect Targeted enemies from moved player
                     if (allEnemiesDead() == true){
                         SceneManager.LoadScene(overWorldScene);
                     }

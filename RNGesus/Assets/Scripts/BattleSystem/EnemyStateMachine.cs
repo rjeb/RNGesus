@@ -137,35 +137,70 @@ public class EnemyStateMachine : MonoBehaviour, Subject
         }
         actionStarted = true;
 
-        //animate the enemy near the hero to attack
-        yield return new WaitForSeconds(1.0f);
-        Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 4.5f, this.startPosition.y, playerToAttack.transform.position.z);
-        while (MoveTowardsEnemy(playerPosition)){
-            yield return null;
-        }
-        //wait
-        yield return new WaitForSeconds(1.5f);
-        //do damage
-        BSM.PerformList[0].cardToUse.useCard();
-        this.usedCard(BSM.PerformList[0].cardToUse);
-        //animate back to start position
-        Vector3 firstPosition = startPosition;
-         while (MoveTowardsStart(firstPosition)){
-            yield return null;
-        }
-        //remove this performer from list in BSM
-        BSM.PerformList.RemoveAt(0);
-        //reset BSM to WAIT
-        BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
-        //end coroutine
-        actionStarted = false;
-        //determine if all enemies have moved
-        moved = true;
-        currentState = TurnState.MOVED;
-        
-        //notify BSM that this enemy has moved
-        this.notifyObservers("EnemyActionDone1");
+        EnemyStateMachine tmpESM = BSM.PerformList[0].cardToUse.CardTargets[0].GetComponent<EnemyStateMachine>();
+        PlayerStateMachine tmpPSM = BSM.PerformList[0].cardToUse.CardTargets[0].GetComponent<PlayerStateMachine>();
+        if (tmpPSM != null){
 
+            //animate the enemy near the hero to attack
+            yield return new WaitForSeconds(1.0f);
+            Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 4.5f, this.startPosition.y, playerToAttack.transform.position.z);
+            while (MoveTowardsEnemy(playerPosition)){
+                yield return null;
+            }
+            //wait
+            yield return new WaitForSeconds(1.5f);
+            //do damage
+            BSM.PerformList[0].cardToUse.useCard();
+            this.usedCard(BSM.PerformList[0].cardToUse);
+            //animate back to start position
+            Vector3 firstPosition = startPosition;
+             while (MoveTowardsStart(firstPosition)){
+                yield return null;
+            }
+            //remove this performer from list in BSM
+            BSM.PerformList.RemoveAt(0);
+            //reset BSM to WAIT
+            BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
+            //end coroutine
+            actionStarted = false;
+            //determine if all enemies have moved
+            moved = true;
+            currentState = TurnState.MOVED;
+        
+            //notify BSM that this enemy has moved
+            this.notifyObservers("EnemyActionDone1");
+        }
+        else if (tmpESM != null){
+            
+            //animate the enemy near the hero to attack
+            yield return new WaitForSeconds(1.0f);
+            Vector3 playerPosition = new Vector3(playerToAttack.transform.position.x + 2.0f, this.startPosition.y, playerToAttack.transform.position.z);
+            while (MoveTowardsEnemy(playerPosition)){
+                yield return null;
+            }
+            //wait
+            yield return new WaitForSeconds(1.5f);
+            //do damage
+            BSM.PerformList[0].cardToUse.useCard();
+            this.usedCard(BSM.PerformList[0].cardToUse);
+            //animate back to start position
+            Vector3 firstPosition = startPosition;
+             while (MoveTowardsStart(firstPosition)){
+                yield return null;
+            }
+            //remove this performer from list in BSM
+            BSM.PerformList.RemoveAt(0);
+            //reset BSM to WAIT
+            BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
+            //end coroutine
+            actionStarted = false;
+            //determine if all enemies have moved
+            moved = true;
+            currentState = TurnState.MOVED;
+        
+            //notify BSM that this enemy has moved
+            this.notifyObservers("EnemyActionDone1");
+        }
     }
     
     //methods to move Enemy

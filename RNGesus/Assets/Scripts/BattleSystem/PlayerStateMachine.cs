@@ -104,35 +104,70 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             yield break;
         }
         actionStarted = true;
+        EnemyStateMachine tmpESM = BSM.PerformList[0].cardToUse.CardTargets[0].GetComponent<EnemyStateMachine>();
+        PlayerStateMachine tmpPSM = BSM.PerformList[0].cardToUse.CardTargets[0].GetComponent<PlayerStateMachine>();
+        if (tmpESM != null){
 
-        //animate the player near the enemy to attack
-        yield return new WaitForSeconds(1.0f);
-        Vector3 enemyPosition = new Vector3(enemyToAttack.transform.position.x - 4.5f, this.startPosition.y, enemyToAttack.transform.position.z);
-        while (MoveTowardsPlayer(enemyPosition)){
-            yield return null;
+            //animate the player near the enemy to attack
+            yield return new WaitForSeconds(1.0f);
+            Vector3 enemyPosition = new Vector3(enemyToAttack.transform.position.x - 4.5f, this.startPosition.y, enemyToAttack.transform.position.z);
+            while (MoveTowardsPlayer(enemyPosition)){
+                yield return null;
+            }
+            //wait
+            yield return new WaitForSeconds(1.5f);
+            //do damage
+            BSM.PerformList[0].cardToUse.useCard();
+            this.usedCard(BSM.PerformList[0].cardToUse);
+            //animate back to start position
+            Vector3 firstPosition = startPosition;
+             while (MoveTowardsStart(firstPosition)){
+                yield return null;
+            }
+            //remove this performer from list in BSM
+            BSM.PerformList.RemoveAt(0);
+            //reset BSM to WAIT
+            BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
+            //end coroutine
+            actionStarted = false;
+
+            moved = true;
+            currentState = TurnState.MOVED;
+
+            //notify the battle state machine that this player is done acting
+            this.notifyObservers("PlayerActionDone1");
         }
-        //wait
-        yield return new WaitForSeconds(1.5f);
-        //do damage
-        BSM.PerformList[0].cardToUse.useCard();
-        this.usedCard(BSM.PerformList[0].cardToUse);
-        //animate back to start position
-        Vector3 firstPosition = startPosition;
-         while (MoveTowardsStart(firstPosition)){
-            yield return null;
+        else if (tmpPSM != null){
+            //animate the player near the enemy to attack
+            yield return new WaitForSeconds(1.0f);
+            Vector3 enemyPosition = new Vector3(enemyToAttack.transform.position.x - 1.5f, this.startPosition.y, enemyToAttack.transform.position.z);
+            while (MoveTowardsPlayer(enemyPosition)){
+                yield return null;
+            }
+            //wait
+            yield return new WaitForSeconds(1.5f);
+            //do damage
+            BSM.PerformList[0].cardToUse.useCard();
+            this.usedCard(BSM.PerformList[0].cardToUse);
+            //animate back to start position
+            Vector3 firstPosition = startPosition;
+             while (MoveTowardsStart(firstPosition)){
+                yield return null;
+            }
+            //remove this performer from list in BSM
+            BSM.PerformList.RemoveAt(0);
+            //reset BSM to WAIT
+            BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
+            //end coroutine
+            actionStarted = false;
+
+            moved = true;
+            currentState = TurnState.MOVED;
+
+            //notify the battle state machine that this player is done acting
+            this.notifyObservers("PlayerActionDone1");
         }
-        //remove this performer from list in BSM
-        BSM.PerformList.RemoveAt(0);
-        //reset BSM to WAIT
-        BSM.battleStates = BattleStateMachine.PerformAction.WAIT;
-        //end coroutine
-        actionStarted = false;
 
-        moved = true;
-        currentState = TurnState.MOVED;
-
-        //notify the battle state machine that this player is done acting
-        this.notifyObservers("PlayerActionDone1");
     }
 
     //methods to move player
@@ -228,11 +263,22 @@ public class PlayerStateMachine : MonoBehaviour, Subject
     
     //default generator if no inputs are given
     public void generateCards(){
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 15; i++)
         {
             CardAttack1 tmp = new CardAttack1();
             this.player.Cards.Add(tmp);
-        } 
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            CardAttack2 tmp = new CardAttack2();
+            this.player.Cards.Add(tmp);
+        }
+        for (int i = 0; i < 7; i++)
+        {
+            CardHeal1 tmp = new CardHeal1();
+            this.player.Cards.Add(tmp);
+        }
+        this.shuffle();
     }
 
     //sets Card List to incoming list if given
@@ -249,4 +295,18 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         this.player.Cards.Remove(cardInput);
         Debug.Log("Used card: " + cardInput.name);
     }
+
+    public void shuffle(){
+        System.Random rng = new System.Random();
+
+        int n = this.player.Cards.Count;  
+        while (n > 1) {  
+            n--;  
+            int k = rng.Next(n + 1);  
+            BaseCard value = this.player.Cards[k];  
+            this.player.Cards[k] = this.player.Cards[n];  
+            this.player.Cards[n] = value;  
+        }  
+    }
+
 }
