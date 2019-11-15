@@ -12,10 +12,10 @@ public class LevelSelector : MonoBehaviour
 
     void Start()
     {
-        /*for (int i = 1; i < levelButtons.Length; i++)
+        for (int i = 1; i < levelButtons.Length; i++)
         {
             levelButtons[i].interactable = false;
-        }*/
+        }
     }
 
     public void SelectLevel(LevelStateMachine LSM)
