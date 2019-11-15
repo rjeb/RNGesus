@@ -7,6 +7,7 @@ public class BaseCard
 {
     public string name;
     public float value;
+    public float numTarget; // number of targets Card can target (attack 2 enemies, heal 3 players, etc)
     public string Type; //type of Card: Attack, Support, etc.
     public string desc; //description of the card
 
