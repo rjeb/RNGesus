@@ -36,7 +36,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
     public GameObject hitObject;
     public GameObject selectedPlayer;
     public List<GameObject> selectedTargets;
-    public bool cardsLoaded, playerSelected, targetsSelected;
+    public bool cardsLoaded, playerSelected, targetsSelected, inFirst;
     public BaseCard selectedCard;
     public List<BaseCard> CardInfo = new List<BaseCard>();
 
@@ -45,10 +45,15 @@ public class BattleStateMachine : MonoBehaviour, Observer
     public List<GameObject> EnemyCharacters = new List<GameObject>();
     public List<GameObject> CardButtons = new List<GameObject>();
     public GameObject TextUI;
+    public GameObject WinUI;
 
     //link to different scenes
     public string overWorldScene;
     public string titleScene;
+
+    public AudioSource battleBGM;
+    public AudioSource winAudioSource;
+    public AudioSource loseAudioSource;
 
     // Start is called before the first frame update
     IEnumerator Start()
@@ -450,6 +455,31 @@ public class BattleStateMachine : MonoBehaviour, Observer
         TextUI.GetComponentInChildren<Text>().text = input;
     }
 
+    //coroutine to wait for x seconds
+    IEnumerator waitFor(float input)
+    {
+        yield return new WaitForSeconds(input);
+    }
+
+    //coroutine for winnning
+    IEnumerator winRoutine(){
+        yield return new WaitForSeconds(7.5f);
+        SceneManager.LoadScene(overWorldScene);
+    }
+
+    //coroutine for losing
+    IEnumerator loseRoutine(){
+        yield return new WaitForSeconds(7.5f);
+        SceneManager.LoadScene(titleScene);
+    }
+
+    //coroutine to wait on other coroutines
+    IEnumerator DoLast() {
+        while(inFirst)       
+           yield return new WaitForSeconds(0.1f);
+        print("Do stuff.");
+    }
+
 
     //methods that must be implemented because this implements interface observer
     public void updateFromSubject(){
@@ -464,7 +494,10 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     //deselect the player and move on to the next state, allowing the next player to be selected
                     selectedTargets.Clear(); //deselect Targeted enemies from moved player
                     if (allEnemiesDead() == true){
-                        SceneManager.LoadScene(overWorldScene);
+                        WinUI.SetActive(true);
+                        battleBGM.Stop();
+                        winAudioSource.Play();
+                        StartCoroutine(winRoutine());
                     }
                     this.selectedPlayer.GetComponent<PlayerStateMachine>().dehighlight();
                     this.playerInput = PlayerGUI.WAITING;
@@ -478,7 +511,11 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     //deselect the player and move on to the next state, allowing the next player to be selected
                     if (allPlayersDead() == true)
                     {
-                        SceneManager.LoadScene(titleScene);
+                        WinUI.GetComponentInChildren<Text>().text = "You have lost";
+                        WinUI.SetActive(true);
+                        battleBGM.Stop();
+                        loseAudioSource.Play();
+                        StartCoroutine(loseRoutine());
                     }
                     //if every enemy has moved, proceed to switch turns to PLayer Turn
                     if(this.allEnemiesMoved() == true){
