@@ -245,6 +245,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45356fa53dc230a4680bbe9f7901c21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitExplosion: {fileID: 3754715013410067463, guid: ee5f20a489b32104d9722baaa5d03a42,
+    type: 3}
+  healExplosion: {fileID: 5685157000954477161, guid: 7a71a822ece966a45b57700674bb19f9,
+    type: 3}
   player:
     name: Mary
     baseHP: 100

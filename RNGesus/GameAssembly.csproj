@@ -68,7 +68,9 @@
     <Compile Include="Assets\Scripts\BattleSystem\BattleStateMachine.cs" />
     <Compile Include="Assets\Scripts\BattleSystem\CardAttack1.cs" />
     <Compile Include="Assets\Scripts\BattleSystem\CardAttack2.cs" />
+    <Compile Include="Assets\Scripts\BattleSystem\CardAttack3.cs" />
     <Compile Include="Assets\Scripts\BattleSystem\CardButton.cs" />
+    <Compile Include="Assets\Scripts\BattleSystem\CardDebuff1.cs" />
     <Compile Include="Assets\Scripts\BattleSystem\CardHeal1.cs" />
     <Compile Include="Assets\Scripts\BattleSystem\EnemyStateMachine.cs" />
     <Compile Include="Assets\Scripts\BattleSystem\HandleTurn.cs" />

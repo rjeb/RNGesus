@@ -8,9 +8,9 @@ public class CardAttack2 : BaseCard
     public CardAttack2()
     {
         this.name = "Sodom & Gomorrah";
-        this.value = 30;
+        this.value = 25;
         this.Type = "Attack";
-        this.desc = "Target 2 enemies and deal 30 damage to each";
+        this.desc = "Deal 50 Damage spread across up to two targets";
         this.numTarget = 2;
     }
 
@@ -23,6 +23,7 @@ public class CardAttack2 : BaseCard
                 for (int i = 0; i < this.CardTargets.Count; i++)
                 {
                     this.CardTargets[i].GetComponent<EnemyStateMachine>().subtractHP(this.value);
+                    this.CardTargets[i].GetComponent<EnemyStateMachine>().damagedExplode();
                 }
                 //this.CardTargets[0].GetComponent<EnemyStateMachine>().subtractHP(this.value);
                 break;
@@ -30,6 +31,7 @@ public class CardAttack2 : BaseCard
                 for (int i = 0; i < this.CardTargets.Count; i++)
                 {
                     this.CardTargets[i].GetComponent<PlayerStateMachine>().subtractHP(this.value);
+                    this.CardTargets[i].GetComponent<PlayerStateMachine>().damagedExplode();
                 }
                 //this.CardTargets[0].GetComponent<PlayerStateMachine>().subtractHP(this.value);
                 break;

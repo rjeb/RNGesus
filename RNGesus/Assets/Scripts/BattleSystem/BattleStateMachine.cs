@@ -200,7 +200,7 @@ public class BattleStateMachine : MonoBehaviour, Observer
             for (int i = 0; i < this.EnemyCharacters.Count; i++)
             {
                 if (this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState != EnemyStateMachine.TurnState.DEAD){
-                    this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.WAITING;
+                    this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.IDLE;
                     this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved = false;
                 }
             }
@@ -209,6 +209,14 @@ public class BattleStateMachine : MonoBehaviour, Observer
             this.targetsSelected = false;
             this.turn = Turn.ENEMY;
             this.playerInput = PlayerGUI.IDLE;
+            //detect the enemy that is not dead yet and set him to be the first to make a move
+            for (int i = 0; i < this.EnemyCharacters.Count; i++)
+            {
+                if (this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState != EnemyStateMachine.TurnState.DEAD && this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved != true){
+                    this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.WAITING;
+                    break;
+                }
+            }
         }
         else if(this.turn == Turn.ENEMY){
             for(int i = 0; i < this.PlayerCharacters.Count; i++){
@@ -472,10 +480,19 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     {
                         SceneManager.LoadScene(titleScene);
                     }
-                                    //if every player has moved, proceed to switch turns to Enemy Turn
+                    //if every enemy has moved, proceed to switch turns to PLayer Turn
                     if(this.allEnemiesMoved() == true){
                         this.switchTurns();
                     }
+                    //else, detect the next enemy and have them generate a turn
+                    for (int i = 0; i < this.EnemyCharacters.Count; i++)
+                    {
+                        if (this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState != EnemyStateMachine.TurnState.DEAD && this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().moved != true && this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState == EnemyStateMachine.TurnState.IDLE){
+                            this.EnemyCharacters[i].GetComponent<EnemyStateMachine>().currentState = EnemyStateMachine.TurnState.WAITING;
+                            break;
+                        }
+                    }
+
                     break;
             }
         }

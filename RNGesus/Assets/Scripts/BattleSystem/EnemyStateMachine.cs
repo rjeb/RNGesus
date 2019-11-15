@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class EnemyStateMachine : MonoBehaviour, Subject
 {
+    [SerializeField] GameObject hitExplosion;
+    [SerializeField] GameObject healExplosion;
     public BaseEnemy enemy;
 
     private BattleStateMachine BSM;
@@ -317,6 +319,16 @@ public class EnemyStateMachine : MonoBehaviour, Subject
     public void usedCard(BaseCard cardInput){
         this.enemy.Cards.Remove(cardInput);
         Debug.Log("Used card: " + cardInput.name);
+    }
+
+    public void damagedExplode(){
+        GameObject go = Instantiate(hitExplosion, this.startPosition, Quaternion.identity);
+        Destroy(go, 6f);
+    }
+
+    public void healExplode(){
+        GameObject go = Instantiate(healExplosion, this.startPosition, Quaternion.identity);
+        Destroy(go, 6f);
     }
 
 }

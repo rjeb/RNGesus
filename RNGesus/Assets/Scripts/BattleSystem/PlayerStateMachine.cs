@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerStateMachine : MonoBehaviour, Subject
 {
+    [SerializeField] GameObject hitExplosion;
+    [SerializeField] GameObject healExplosion;
     public BasePlayerCharacter player;
 
   
@@ -278,6 +280,14 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             CardHeal1 tmp = new CardHeal1();
             this.player.Cards.Add(tmp);
         }
+        for (int i = 0; i < 5; i++){
+            CardAttack3 tmp = new CardAttack3();
+            this.player.Cards.Add(tmp);
+        }
+        for (int i = 0; i < 8; i++){
+            CardDebuff1 tmp = new CardDebuff1();
+            this.player.Cards.Add(tmp);
+        }
         this.shuffle();
     }
 
@@ -297,7 +307,7 @@ public class PlayerStateMachine : MonoBehaviour, Subject
     }
 
     public void shuffle(){
-        System.Random rng = new System.Random();
+        System.Random rng = new System.Random(this.player.GetHashCode());
 
         int n = this.player.Cards.Count;  
         while (n > 1) {  
@@ -307,6 +317,16 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             this.player.Cards[k] = this.player.Cards[n];  
             this.player.Cards[n] = value;  
         }  
+    }
+
+    public void damagedExplode(){
+        GameObject go = Instantiate(hitExplosion, this.startPosition, Quaternion.identity);
+        Destroy(go, 6f);
+    }
+
+    public void healExplode(){
+        GameObject go = Instantiate(healExplosion, this.startPosition, Quaternion.identity);
+        Destroy(go, 6f);
     }
 
 }

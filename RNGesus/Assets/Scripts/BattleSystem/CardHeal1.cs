@@ -21,9 +21,11 @@ public class CardHeal1 : BaseCard
         {
             case ("Player"):
                 this.CardTargets[0].GetComponent<PlayerStateMachine>().addHP(this.value);
+                this.CardTargets[0].GetComponent<PlayerStateMachine>().healExplode();
                 break;
             case ("Enemy"):
                 this.CardTargets[0].GetComponent<EnemyStateMachine>().addHP(this.value);
+                this.CardTargets[0].GetComponent<EnemyStateMachine>().healExplode();
                 break;
         }
     }
