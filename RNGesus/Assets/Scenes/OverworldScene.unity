@@ -880,8 +880,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy1: Assets/Prefabs/Enemies/Pontius Pilates.prefab
-  enemy2: Assets/Prefabs/Enemies/BusinessGoon1.prefab
-  enemy3: Assets/Prefabs/Enemies/BusinessGoon2.prefab
+  enemy2: Assets/Prefabs/Enemies/PontiusGoon.prefab
+  enemy3: 
   enemy4: 
 --- !u!1 &1375803178
 GameObject:
