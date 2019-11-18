@@ -473,6 +473,8 @@ public class BattleStateMachine : MonoBehaviour, Observer
         winAudioSource.Play();
         yield return new WaitForSeconds(7.5f);
         SceneManager.LoadScene(overWorldScene);
+        LevelSelectorManager.incrementNodes();
+        LevelSelectorManager.Load(overWorldScene);
     }
 
    IEnumerator loseRoutine(){

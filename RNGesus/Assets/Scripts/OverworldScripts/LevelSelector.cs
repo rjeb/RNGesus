@@ -16,6 +16,8 @@ public class LevelSelector : MonoBehaviour
         {
             levelButtons[i].interactable = false;
         }
+
+        instantiateNodes();
     }
 
     public void SelectLevel(LevelStateMachine LSM)
@@ -51,5 +53,14 @@ public class LevelSelector : MonoBehaviour
 
         CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
         //SceneManager.LoadScene(levelName);
+    }
+
+    public void instantiateNodes(){
+        if (LevelSelectorManager.getUnlockedNodes() != null){
+            for (int i = 0; i < LevelSelectorManager.getUnlockedNodes(); i++)
+            {
+                levelButtons[i].interactable = true;
+            }
+        }
     }
 }
