@@ -45,8 +45,8 @@ public class EnemyStateMachine : MonoBehaviour, Subject
     {
         this.BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         this.startPosition = transform.position;
-        this.observerList = new List<Observer>(); 
-        this.startcolor = this.GetComponent<Renderer>().material.color;
+        this.observerList = new List<Observer>();
+        this.startcolor = Color.white;
         
         //if enemyCardList is empty, generate new list of cards
         if (this.enemy.Cards.Count == 0){
@@ -156,8 +156,10 @@ public class EnemyStateMachine : MonoBehaviour, Subject
             this.usedCard(BSM.PerformList[0].cardToUse);
             //animate back to start position
             Vector3 firstPosition = startPosition;
-             while (MoveTowardsStart(firstPosition)){
-                yield return null;
+            if (currentState != TurnState.DEAD){
+                while (MoveTowardsStart(firstPosition)){
+                    yield return null;
+                }
             }
             //remove this performer from list in BSM
             BSM.PerformList.RemoveAt(0);

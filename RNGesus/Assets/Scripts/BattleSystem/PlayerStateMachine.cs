@@ -47,9 +47,9 @@ public class PlayerStateMachine : MonoBehaviour, Subject
         this.BSM = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();   
         this.startPosition = transform.position;
         this.currentState = TurnState.IDLE;
-        this.observerList = new List<Observer>(); 
-        this.startcolor = this.GetComponent<Renderer>().material.color;
-        
+        this.observerList = new List<Observer>();
+        this.startcolor = Color.white;
+
         //if playerCardList is empty, generate new list of cards
         if (this.player.Cards.Count == 0){
             this.generateCards();
@@ -123,8 +123,10 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             this.usedCard(BSM.PerformList[0].cardToUse);
             //animate back to start position
             Vector3 firstPosition = startPosition;
-             while (MoveTowardsStart(firstPosition)){
-                yield return null;
+            if (currentState != TurnState.DEAD){
+                while (MoveTowardsStart(firstPosition)){
+                    yield return null;
+                }
             }
             //remove this performer from list in BSM
             BSM.PerformList.RemoveAt(0);

@@ -10,6 +10,6 @@
     "\\Assets\\Tests",
     "\\Assets\\Tests\\PlayModeTests"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\MiscScripts\\CharacterManager.cs",
+  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\BattleStateMachine.cs",
   "PreviewInSolutionExplorer": false
 }

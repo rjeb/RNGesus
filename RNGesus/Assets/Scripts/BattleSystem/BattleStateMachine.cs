@@ -105,12 +105,16 @@ public class BattleStateMachine : MonoBehaviour, Observer
                 if(PerformList[0].Type == "Enemy"){
                     EnemyStateMachine ESM = performer.GetComponent<EnemyStateMachine> ();
                     ESM.playerToAttack = PerformList[0].AttackersTargets[0];
-                    ESM.currentState = EnemyStateMachine.TurnState.ACTION;
+                    if (ESM.currentState != EnemyStateMachine.TurnState.DEAD){
+                        ESM.currentState = EnemyStateMachine.TurnState.ACTION;
+                    }
                 }
                 if(PerformList[0].Type == "Player"){
                     PlayerStateMachine PSM = performer.GetComponent<PlayerStateMachine>();
                     PSM.enemyToAttack = PerformList[0].AttackersTargets[0];
-                    PSM.currentState = PlayerStateMachine.TurnState.ACTION;
+                    if (PSM.currentState != PlayerStateMachine.TurnState.DEAD){ //edge case where player dies from recoil
+                        PSM.currentState = PlayerStateMachine.TurnState.ACTION;
+                    }
                 }
                 if (PerformList.Count == 0) {
                     battleStates = PerformAction.WAIT;
@@ -504,6 +508,9 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     if (allEnemiesDead() == true){
                         StartCoroutine(winRoutine());
                     }
+                    else if (allPlayersDead() == true){
+                        StartCoroutine(loseRoutine());
+                    }
                     this.selectedPlayer.GetComponent<PlayerStateMachine>().dehighlight();
                     this.playerInput = PlayerGUI.WAITING;
                     
@@ -517,6 +524,9 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     if (allPlayersDead() == true)
                     {
                         StartCoroutine(loseRoutine());
+                    }
+                    else if (allEnemiesDead() == true){
+                        StartCoroutine(winRoutine());
                     }
                     //if every enemy has moved, proceed to switch turns to PLayer Turn
                     if(this.allEnemiesMoved() == true){
