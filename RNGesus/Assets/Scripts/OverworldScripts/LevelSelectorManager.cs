@@ -24,7 +24,7 @@ public static class LevelSelectorManager
         return unlockedNodes;
     }
 
-    public static setUnlockedNodes(int input)
+    public static void setUnlockedNodes(int input)
     {
         unlockedNodes = input;
     }
