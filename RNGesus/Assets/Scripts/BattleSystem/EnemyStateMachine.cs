@@ -167,8 +167,10 @@ public class EnemyStateMachine : MonoBehaviour, Subject
             actionStarted = false;
             //determine if all enemies have moved
             moved = true;
-            currentState = TurnState.MOVED;
-        
+
+            if (currentState != TurnState.DEAD){ //edgecase where someone is killed by recoil
+                currentState = TurnState.MOVED;
+            }
             //notify BSM that this enemy has moved
             this.notifyObservers("EnemyActionDone1");
         }

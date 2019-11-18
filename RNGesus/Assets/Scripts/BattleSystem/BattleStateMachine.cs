@@ -463,12 +463,20 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
     //coroutine for winnning
     IEnumerator winRoutine(){
+        yield return new WaitForSeconds(2.0f);
+        WinUI.SetActive(true);
+        battleBGM.Stop();
+        winAudioSource.Play();
         yield return new WaitForSeconds(7.5f);
         SceneManager.LoadScene(overWorldScene);
     }
 
-    //coroutine for losing
-    IEnumerator loseRoutine(){
+   IEnumerator loseRoutine(){
+        WinUI.GetComponentInChildren<Text>().text = "You have lost";
+        yield return new WaitForSeconds(2.0f);
+        WinUI.SetActive(true);
+        battleBGM.Stop();
+        loseAudioSource.Play();
         yield return new WaitForSeconds(7.5f);
         SceneManager.LoadScene(titleScene);
     }
@@ -494,9 +502,6 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     //deselect the player and move on to the next state, allowing the next player to be selected
                     selectedTargets.Clear(); //deselect Targeted enemies from moved player
                     if (allEnemiesDead() == true){
-                        WinUI.SetActive(true);
-                        battleBGM.Stop();
-                        winAudioSource.Play();
                         StartCoroutine(winRoutine());
                     }
                     this.selectedPlayer.GetComponent<PlayerStateMachine>().dehighlight();
@@ -511,10 +516,6 @@ public class BattleStateMachine : MonoBehaviour, Observer
                     //deselect the player and move on to the next state, allowing the next player to be selected
                     if (allPlayersDead() == true)
                     {
-                        WinUI.GetComponentInChildren<Text>().text = "You have lost";
-                        WinUI.SetActive(true);
-                        battleBGM.Stop();
-                        loseAudioSource.Play();
                         StartCoroutine(loseRoutine());
                     }
                     //if every enemy has moved, proceed to switch turns to PLayer Turn

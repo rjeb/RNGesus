@@ -4,11 +4,12 @@
     "\\Assets",
     "\\Assets\\Scripts",
     "\\Assets\\Scripts\\BattleSystem",
+    "\\Assets\\Scripts\\Interfaces",
     "\\Assets\\Scripts\\MiscScripts",
     "\\Assets\\Scripts\\SceneScripts",
     "\\Assets\\Tests",
     "\\Assets\\Tests\\PlayModeTests"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\BattleSystem\\CardAttack2.cs",
+  "SelectedNode": "\\Assets\\Scripts\\MiscScripts\\CharacterManager.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -134,8 +134,9 @@ public class PlayerStateMachine : MonoBehaviour, Subject
             actionStarted = false;
 
             moved = true;
-            currentState = TurnState.MOVED;
-
+            if (currentState != TurnState.DEAD){ //edge case where player kills himself with recoil 
+                currentState = TurnState.MOVED;
+            }
             //notify the battle state machine that this player is done acting
             this.notifyObservers("PlayerActionDone1");
         }
