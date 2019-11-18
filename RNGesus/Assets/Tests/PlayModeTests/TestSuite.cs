@@ -33,6 +33,23 @@ namespace Tests
             Assert.IsNotNull(PlayerCharacter);
         }
 
+        //instantiate GameObjects from Prefab
+        [UnityTest]
+        public IEnumerator LoadBattleScene()
+        {
+            string newGameScene = "BattleSceneTemplate";
+            List<string> playerStrings = new List<string>();
+            List<string> enemyStrings = new List<string>();
+            playerStrings.Add("Assets/Prefabs/Characters/Jesus.prefab");
+            playerStrings.Add("Assets/Prefabs/Characters/Mary.prefab");
+            enemyStrings.Add("Assets/Prefabs/Enemies/Pontius Pilates.prefab");
+            enemyStrings.Add("Assets/Prefabs/Enemies/PontiusGoon.prefab");
+
+            CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
+
+            yield return new WaitForSeconds(5.0f);
+        }
+
         //tests ability to populate a card from HandleTurn information
         [UnityTest]
         public IEnumerator HandleTurnPopulateCard()

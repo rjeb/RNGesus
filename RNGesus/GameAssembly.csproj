@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Interfaces\Subject.cs" />
     <Compile Include="Assets\Scripts\MiscScripts\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\OverworldScripts\LevelSelector.cs" />
+    <Compile Include="Assets\Scripts\OverworldScripts\LevelSelectorManager.cs" />
     <Compile Include="Assets\Scripts\OverworldScripts\LevelStateMachine.cs" />
     <Compile Include="Assets\Scripts\OverworldScripts\MapScaler.cs" />
     <Compile Include="Assets\Scripts\SceneScripts\PlayerController.cs" />
