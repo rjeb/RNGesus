@@ -31,7 +31,8 @@ public class TitleScreen : MonoBehaviour
 
         CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
         */
-        SceneManager.LoadScene(newGameScene);
+        LevelSelectorManager.resetNodes();
+        LevelSelectorManager.Load(newGameScene);
     }
 
     public void QuitGame()

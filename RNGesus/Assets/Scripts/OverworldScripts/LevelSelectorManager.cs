@@ -28,5 +28,15 @@ public static class LevelSelectorManager
     {
         unlockedNodes = input;
     }
+
+    public static void resetNodes()
+    {
+        unlockedNodes = 1;
+    }
+
+    public static void incrementNodes()
+    {
+        unlockedNodes++;
+    }
     
 }
