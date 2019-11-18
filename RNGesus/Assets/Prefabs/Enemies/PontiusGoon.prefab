@@ -125,7 +125,7 @@ MonoBehaviour:
   healExplosion: {fileID: 5685157000954477161, guid: 7a71a822ece966a45b57700674bb19f9,
     type: 3}
   enemy:
-    name: BusinessGoon1
+    name: PontiusGoon
     baseHP: 100
     currentHP: 100
     baseMP: 100
