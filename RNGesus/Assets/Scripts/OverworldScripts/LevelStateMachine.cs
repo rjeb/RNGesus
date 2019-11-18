@@ -6,6 +6,8 @@ using UnityEngine;
 public class LevelStateMachine : MonoBehaviour
 {
     public string enemy1, enemy2, enemy3, enemy4;
+    public bool accessible;
+
     // Start is called before the first frame update
     void Start()
     {
