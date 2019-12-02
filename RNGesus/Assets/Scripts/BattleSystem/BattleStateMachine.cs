@@ -423,11 +423,11 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
         //populate Lists
         for(int i = 0; i < playerStrings.Count; i++){
-            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(playerStrings[i], typeof(GameObject)), new Vector3(-3 + (0.5f * i), 1, 0 + (1 * i)), Quaternion.identity);
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(playerStrings[i], typeof(GameObject)), new Vector3(-4 + (1 * i), 1, 0 + (1 * i)), Quaternion.identity);
         }
 
         for(int i = 0; i < enemyStrings.Count; i++){
-            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(5 + (-1 * i), 2, 0 + (1 * i)), Quaternion.identity);
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(7 + (-2 * i), 2, 0 + (2 * i)), Quaternion.identity);
         }
     }
 
