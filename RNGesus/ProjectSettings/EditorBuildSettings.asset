@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/PrototypeCombatScene.unity
     guid: 37002cc25f559d648ab9664a882f426c
   - enabled: 1
-    path: Assets/Scenes/BattleScene.unity
+    path: Assets/Scenes/TesterBattleScene.unity
     guid: 21a5309032e556f4f8dabfc77e4b1962
   - enabled: 1
     path: Assets/Scenes/OverworldScene.unity
