@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - CardButton
   - TextUI
+  - BattleStateMachine
   layers:
   - Default
   - TransparentFX

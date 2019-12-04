@@ -423,11 +423,11 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
         //populate Lists
         for(int i = 0; i < playerStrings.Count; i++){
-            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(playerStrings[i], typeof(GameObject)), new Vector3(-4 + (1 * i), 1, 0 + (1 * i)), Quaternion.identity);
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(playerStrings[i], typeof(GameObject)), new Vector3(-4 + (.8f * i), 1, 0 + (1 * i)), Quaternion.identity);
         }
 
         for(int i = 0; i < enemyStrings.Count; i++){
-            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(7 + (-2 * i), 2, 0 + (2 * i)), Quaternion.identity);
+            Instantiate((GameObject)AssetDatabase.LoadAssetAtPath(enemyStrings[i], typeof(GameObject)), new Vector3(7 + (-2.0f * i), 2, 0 + (1 * i)), Quaternion.identity);
         }
     }
 
@@ -456,6 +456,8 @@ public class BattleStateMachine : MonoBehaviour, Observer
 
     //display information to the TextUI
     public void displayText(string input){
+        RectTransform rt = TextUI.GetComponent<RectTransform>();
+        TextUI.GetComponentInChildren<Text>().GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rt.rect.width - (rt.rect.width / 8));
         TextUI.GetComponentInChildren<Text>().text = input;
     }
 
@@ -472,7 +474,6 @@ public class BattleStateMachine : MonoBehaviour, Observer
         battleBGM.Stop();
         winAudioSource.Play();
         yield return new WaitForSeconds(7.5f);
-        SceneManager.LoadScene(overWorldScene);
         LevelSelectorManager.incrementNodes();
         LevelSelectorManager.Load(overWorldScene);
     }

@@ -46,9 +46,45 @@ namespace Tests
             enemyStrings.Add("Assets/Prefabs/Enemies/PontiusGoon.prefab");
 
             CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
-
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(1.0f);
         }
+
+        /*
+        //test attacking
+        [UnityTest]
+        public IEnumerator TestAttacking()
+        {
+            string newGameScene = "BattleSceneTemplate";
+            List<string> playerStrings = new List<string>();
+            List<string> enemyStrings = new List<string>();
+            playerStrings.Add("Assets/Prefabs/Characters/Jesus.prefab");
+            playerStrings.Add("Assets/Prefabs/Characters/Mary.prefab");
+            enemyStrings.Add("Assets/Prefabs/Enemies/Pontius Pilates.prefab");
+            enemyStrings.Add("Assets/Prefabs/Enemies/PontiusGoon.prefab");
+
+            CharacterManager.Load(newGameScene, playerStrings, enemyStrings);
+
+            BattleStateMachine BSM = GameObject.FindObjectOfType<BattleStateMachine>();
+            
+            yield return new WaitForSeconds(1.0f);
+
+            //select an attacking type card
+            for (int i = 0; i < BSM.selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards.Count; i++){
+                if (BSM.selectedPlayer.GetComponent<PlayerStateMachine>().player.Cards[i].Type == "Attack"){
+                    BSM.selectCard(i);
+                }
+                break;
+            }
+
+            //select the enemy
+            BSM.selectEnemy(0);
+            yield return new WaitForSeconds(7.0f);
+
+            //assert that the enemy got damaged
+            Assert.True(BSM.EnemyCharacters[0].GetComponent<EnemyStateMachine>().enemy.currentHP != 100);
+
+        }
+        */
 
         //tests ability to populate a card from HandleTurn information
         [UnityTest]
@@ -59,34 +95,9 @@ namespace Tests
             turn.Type = "Attack";
             turn.cardToUse = new CardAttack1();
             turn.populateCard();
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
             yield return null;
             Assert.True(turn.cardToUse.Type == "Attack");
             Assert.True(turn.cardToUse.User == "Player1");
         }
-
-
-
-
-
-        /*
-        // A Test behaves as an ordinary method
-        [Test]
-        public void TestSuiteSimplePasses()
-        {
-            // Use the Assert class to test conditions
-        }
-
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator TestSuiteWithEnumeratorPasses()
-        {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
-        }
-        */
     }
 }
