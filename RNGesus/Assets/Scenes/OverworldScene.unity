@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c18ff0dd8a7bf2e4fad1a70bc1240ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1: Assets/Prefabs/Enemies/PontiusGoon.prefab
+  enemy1: Assets/Prefabs/Enemies/BusinessGoon2.prefab
   enemy2: Assets/Prefabs/Enemies/PontiusGoon.prefab
   enemy3: 
   enemy4: 
